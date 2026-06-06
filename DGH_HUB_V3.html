@@ -5376,9 +5376,6 @@ function repToggleCell(discCode, rowKey, profId){
       da[rowKey][profId]=0;
     }
   }
-  // Scroll the table back to left to show frozen columns
-  const body = document.querySelector('.repartition-disc-body');
-  if(body) body.scrollLeft = 0;
   repSave();
   repRefreshDisc(discCode);
 }
@@ -10565,9 +10562,6 @@ function repToggleProf(discCode, rowKey, profId, maxH){
     const reste = Math.max(0, parseFloat(maxH) - already);
     affect[rowKey][pid] = reste;
   }
-  // Scroll vers la gauche pour voir les colonnes figées
-  const wrap = document.querySelector('.tbl-wrap');
-  if(wrap) wrap.scrollLeft = 0;
   saveState();
   renderRepartitionTable();
 }
