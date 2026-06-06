@@ -5345,7 +5345,7 @@ function repSave(){
 
 // Vider toutes les saisies d'une discipline (LGT)
 function clearDiscAffectLGT(discCode, discLabel){
-  if(!confirm('⚠️  Supprimer toutes les heures saisies pour "'+discLabel+'" ?\n\nCette action effacera toutes les affectations de cette discipline uniquement.\nCette opération est irréversible.')) return;
+  if(!confirm('⚠️  Supprimer toutes les heures saisies pour "'+discLabel+'" ?\\n\\nCette action effacera toutes les affectations de cette discipline uniquement.\\nCette opération est irréversible.')) return;
   if(!state.repAffectations) state.repAffectations={};
   state.repAffectations[discCode]={};
   repSave();
@@ -10539,7 +10539,7 @@ function repToggleNiveau(niveau, discCode){
 
 // Vider toutes les saisies d'une discipline (SEP)
 function clearDiscAffectSEP(discCode, discLabel){
-  if(!confirm('⚠️  Supprimer toutes les heures saisies pour "'+discLabel+'" ?\n\nCette action effacera toutes les affectations de cette discipline uniquement.\nCette opération est irréversible.')) return;
+  if(!confirm('⚠️  Supprimer toutes les heures saisies pour "'+discLabel+'" ?\\n\\nCette action effacera toutes les affectations de cette discipline uniquement.\\nCette opération est irréversible.')) return;
   if(!state.repartitionAffect) state.repartitionAffect = {};
   state.repartitionAffect[discCode] = {};
   saveState();
