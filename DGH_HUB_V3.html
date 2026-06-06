@@ -10381,7 +10381,7 @@ function renderRepartitionTable(){
     +(_currentMode==='equipe' ? '<i class="fa-solid fa-file-arrow-up"></i> Répartition de service à transmettre' : '<i class="fa-solid fa-file-code"></i> JSON')
     +'</button>'
     +'<button class="btn btn-sm no-print" style="background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="printRepartition()"><i class="fa-solid fa-print"></i> Imprimer</button>'
-    +(_currentMode!=='equipe' ? '<button class="btn btn-sm no-print" style="background:rgba(231,76,60,.7);color:#fff;border:none;" onclick="clearDiscAffectSEP(\\''+discCode+'\\',\\''+disc.label.replace(/'/g,"\\\\\\'")+'\\')"><i class="fa-solid fa-eraser"></i> Vider</button>' : '')
+    +(_currentMode!=='equipe' ? '<button class="btn btn-sm no-print" style="background:rgba(231,76,60,.7);color:#fff;border:none;" data-dcode="'+discCode+'" data-dlabel="'+disc.label+'" onclick="clearDiscAffectSEP(this.dataset.dcode,this.dataset.dlabel)"><i class="fa-solid fa-eraser"></i> Vider</button>' : '')
     +'</div></div>'
     +'<div class="panel-body" style="padding:0;">'
     // Légende H. élève
