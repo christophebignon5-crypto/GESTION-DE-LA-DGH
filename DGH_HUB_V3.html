@@ -513,96 +513,268 @@ function showComingSoon() { showHubToast('Module Collège en cours de développe
 
 window.hubGeneratePDF = function(discFilter) {
   if(!_activeApp) { showHubToast('Aucun espace actif.'); return; }
-  var raw = localStorage.getItem(_activeApp==='lgt' ? 'dgh_lgt_state' : 'dgh_sep_state');
+  var isSep = (_activeApp === 'sep');
+  var raw = localStorage.getItem(isSep ? 'dgh_sep_state' : 'dgh_lgt_state');
   if(!raw) { showHubToast('Aucune donnée sauvegardée. Saisissez la répartition d\'abord.'); return; }
-  var state  = JSON.parse(raw);
-  var profs  = state.profs || [];
-  var affect = (_activeApp==='lgt') ? (state.repAffectations||{}) : (state.repartitionAffect||{});
-  var params = Object.assign(getHubParams(), state.params||{});
+  var appState = JSON.parse(raw);
+  var profs    = appState.profs || [];
+  // LGT : repAffectations  → rowKey = "classeLabel||matiere||hProf"
+  // SEP : repartitionAffect → rowKey = "niveau||classeLabel||matCode"
+  var affect = isSep ? (appState.repartitionAffect||{}) : (appState.repAffectations||{});
+  var params = Object.assign(getHubParams(), appState.params||{});
   if(!Object.keys(affect).length) { showHubToast('Aucune affectation saisie dans la répartition.'); return; }
+
+  // ── Index profs par ID (string) ────────────────────────────────────────────
+  var profById = {};
+  profs.forEach(function(p){ profById[String(p.id)] = p; });
+
+  // ── Filtre discipline ──────────────────────────────────────────────────────
   var discKeys = Object.keys(affect);
-  if(discFilter && discFilter!=='' && discFilter!=='*') {
-    discKeys = discKeys.filter(function(k){ return k===discFilter; });
+  if(discFilter && discFilter !== '' && discFilter !== '*') {
+    discKeys = discKeys.filter(function(k){ return k === discFilter; });
     if(!discKeys.length) { showHubToast('Aucune affectation pour cette discipline.'); return; }
   }
+
+  // ── Référentiel disciplines pour l'intitulé complet ───────────────────────
+  var DISC_LABELS = {
+    'P0210':'Lettres-Histoire-Géo-EMC','P0222':'Anglais (LVA)','L0426':'Espagnol (LVB)',
+    'L0433':'Portugais','P1315':'Maths-Sciences','P6500':'Arts Appliqués',
+    'P7200':'Biotechnologie','P2200':'Génie Industriel Textile','P8013':'Éco-Gestion-Vente',
+    'P8517':'Pâtisserie','P8518':'Poissonnerie','L1900':'E.P.S.','P8515':'Boucherie',
+    'P8510':'Hôtellerie-Tech. Culinaire','C0071':'E1D-Spécialisé',
+  };
+  function discLabel(code){ return DISC_LABELS[code] || code; }
+
+  // ── Helper : heures → chaîne formatée ─────────────────────────────────────
+  function fh(v){ var n=parseFloat(v)||0; return n%1===0 ? n.toFixed(0) : n.toFixed(1); }
+
+  // ── Construction des pages par discipline ─────────────────────────────────
+  // Approche : on scanne les affectations pour trouver QUI a des heures,
+  // plutôt que de filtrer les profs par leur champ discipline (source de doublons).
   var discPages = [];
+
   discKeys.forEach(function(discCode) {
     var da = affect[discCode];
     if(!da || !Object.keys(da).length) return;
-    var discProfs = profs.filter(function(p){ return p.discipline===discCode||p.mat===discCode; })
-                         .sort(function(a,b){ return a.nom.localeCompare(b.nom); });
-    var profData = [];
-    discProfs.forEach(function(prof) {
-      var profRows = [];
-      Object.keys(da).forEach(function(rowKey) {
-        var assigns = da[rowKey]||{};
-        var v = (assigns[String(prof.id)]!==undefined) ? assigns[String(prof.id)] : assigns[prof.id];
-        if(v===undefined||v===false) return;
-        var h = (typeof v==='number') ? v : 0;
-        if(h<=0) { var pts=rowKey.split('||'); h=parseFloat(pts[2])||0; }
-        if(h>0) {
-          var pts=rowKey.split('||'); if(pts.length<2) pts=rowKey.split('|');
-          profRows.push({classe:pts[0]||rowKey, matiere:pts[1]||'', h:h});
+
+    // profMap : nameKey → { nom, prenom, prof, rowMap:{dedupKey→h} }
+    var profMap  = {};
+    var profOrder = []; // insertion order → tri alphabétique ensuite
+
+    Object.keys(da).forEach(function(rowKey) {
+      var assigns = da[rowKey] || {};
+
+      // ── Parsing du rowKey selon le module ──────────────────────────────
+      var pts = rowKey.split('||');
+      var classe, matiere;
+      if(isSep) {
+        // SEP : pts[0]=niveau  pts[1]=classeLabel  pts[2]=matCode
+        classe  = pts[1] || pts[0] || rowKey;
+        matiere = pts[2] || '';
+      } else {
+        // LGT : pts[0]=classeLabel  pts[1]=matiere  pts[2]=hProf
+        classe  = pts[0] || rowKey;
+        matiere = pts[1] || '';
+      }
+
+      // ── Pour chaque prof affecté sur cette ligne ────────────────────────
+      Object.keys(assigns).forEach(function(pidStr) {
+        var v = assigns[pidStr];
+        if(v === undefined || v === null || v === false) return;
+
+        var hAssigned = parseFloat(v) || 0;
+        if(isSep) {
+          if(hAssigned <= 0) return;
+        } else {
+          // LGT : si la valeur stockée est 0, fallback sur hProf du rowKey
+          if(hAssigned <= 0) hAssigned = parseFloat(pts[2]) || 0;
+          if(hAssigned <= 0) return;
+        }
+
+        var prof = profById[pidStr];
+        if(!prof) return; // ID introuvable dans state.profs
+
+        var nameKey = (prof.nom||'').toUpperCase() + '||' + (prof.prenom||'').toUpperCase();
+        if(!profMap[nameKey]) {
+          profMap[nameKey] = { nom: prof.nom||'', prenom: prof.prenom||'', prof: prof, rowMap: {} };
+          profOrder.push(nameKey);
+        }
+
+        // Déduplication (classe, matière) : on garde le max des heures
+        var dedupKey = classe + '§' + matiere;
+        if(profMap[nameKey].rowMap[dedupKey] === undefined) {
+          profMap[nameKey].rowMap[dedupKey] = hAssigned;
+        } else if(hAssigned > profMap[nameKey].rowMap[dedupKey]) {
+          profMap[nameKey].rowMap[dedupKey] = hAssigned;
         }
       });
-      if(!profRows.length) return;
-      var totalH = profRows.reduce(function(s,r){ return s+r.h; }, 0);
-      var base   = prof.bmp?(prof.bmpQuotite||0):(prof.quotite||0);
-      var svc    = base-(prof.csd||0)-(prof.decharge||0)+(prof.csr||0);
-      profData.push({nom:prof.nom||'', prenom:prof.prenom||'', quotite:svc,
-        hsa:Math.max(0,Math.round((totalH-svc)*2)/2),
-        reste:Math.max(0,Math.round((svc-totalH)*2)/2), rows:profRows});
     });
-    if(profData.length) discPages.push({code:discCode, profData:profData});
+
+    // ── Construire profData à partir de profMap ─────────────────────────────
+    var profData = [];
+    profOrder.forEach(function(nameKey) {
+      var pm   = profMap[nameKey];
+      var prof = pm.prof;
+
+      var profRows = Object.keys(pm.rowMap).map(function(dk) {
+        var parts = dk.split('§');
+        return { classe: parts[0], matiere: parts[1]||'', h: pm.rowMap[dk] };
+      });
+
+      profRows.sort(function(a,b){
+        var cv = (a.classe||'').localeCompare(b.classe||'');
+        return cv !== 0 ? cv : (a.matiere||'').localeCompare(b.matiere||'');
+      });
+
+      var totalH = profRows.reduce(function(s,r){ return s + r.h; }, 0);
+      var base   = prof.bmp ? (prof.bmpQuotite||0) : (prof.quotite||0);
+      var svc    = base - (prof.csd||0) - (prof.decharge||0) + (prof.csr||0);
+      var hsa    = Math.max(0, Math.round((totalH - svc) * 2) / 2);
+      var reste  = Math.max(0, Math.round((svc - totalH) * 2) / 2);
+
+      profData.push({ nom: pm.nom, prenom: pm.prenom, quotite: svc,
+                      totalH: totalH, hsa: hsa, reste: reste, rows: profRows });
+    });
+
+    // Tri alphabétique par nom
+    profData.sort(function(a,b){ return (a.nom||'').localeCompare(b.nom||''); });
+
+    if(profData.length) {
+      discPages.push({ code: discCode, label: discLabel(discCode), profData: profData });
+    }
   });
+
   if(!discPages.length) { showHubToast('Aucune affectation trouvée pour cette discipline.'); return; }
-  var etab=params.etablissement||'Lycée Polyvalent Léopold Elfort', ville=params.ville||'Mana', annee=params.annee||'2026-2027';
-  var html='<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
-    +'<title>Répartition de service — '+etab+'</title><style>'
-    +'*{box-sizing:border-box;margin:0;padding:0;}'
-    +'@page{size:A4;margin:14mm 18mm;}'
-    +'body{font-family:Arial,sans-serif;font-size:10pt;color:#111;}'
-    +'.ds{margin-bottom:32px;} .ds+.ds{page-break-before:always;}'
-    +'.dh{background:#0B1F40;color:#fff;padding:11px 15px;margin-bottom:14px;}'
-    +'.dh h1{font-size:12pt;font-weight:bold;text-transform:uppercase;}'
-    +'.dh p{font-size:8.5pt;opacity:.65;margin-top:3px;}'
-    +'.pb{margin-bottom:14px;page-break-inside:avoid;border:1px solid #ccc;}'
-    +'.ph{background:#f0f0f0;border-bottom:1px solid #ccc;padding:7px 12px;}'
-    +'.pn{font-size:11pt;font-weight:bold;text-transform:uppercase;}'
-    +'.ps{font-size:8pt;color:#444;margin-top:3px;}'
-    +'.ps span{margin-right:12px;}'
-    +'table{width:100%;border-collapse:collapse;}'
-    +'th{background:#e5e5e5;font-size:8.5pt;font-weight:bold;padding:5px 8px;text-align:left;border:1px solid #bbb;}'
-    +'td{font-size:9pt;padding:4px 8px;border:1px solid #ddd;}'
-    +'tr:nth-child(even) td{background:#f8f8f8;}'
-    +'.ch{width:55px;text-align:right;font-weight:500;}'
-    +'.tr td{font-weight:bold;background:#eaf0f8!important;border-top:2px solid #888;}'
-    +'.ft{font-size:7.5pt;color:#bbb;text-align:center;margin-top:20px;padding-top:8px;border-top:1px solid #eee;}'
-    +'</style></head><body>';
-  discPages.forEach(function(dp){
-    html+='<div class="ds"><div class="dh">'
-      +'<h1>Tableau de répartition des services — '+dp.code+'</h1>'
-      +'<p>'+etab+' · Année scolaire '+annee+'</p></div>';
-    dp.profData.forEach(function(p){
-      var tot=p.rows.reduce(function(s,r){ return s+r.h; },0);
-      html+='<div class="pb"><div class="ph"><div class="pn">'+p.nom+(p.prenom?' '+p.prenom:'')+'</div>'
-        +'<div class="ps"><span>Quotité : <strong>'+p.quotite+'h</strong></span>'
-        +'<span>Validées : <strong>'+tot+'h</strong></span>'
-        +'<span>HSA : <strong>'+p.hsa+'h</strong></span>'
-        +'<span>Reste : <strong>'+p.reste+'h</strong></span>'
-        +'</div></div>'
-        +'<table><thead><tr><th>Classe</th><th>Matière</th><th class="ch">H</th></tr></thead><tbody>';
-      p.rows.forEach(function(r){ html+='<tr><td>'+r.classe+'</td><td>'+r.matiere+'</td><td class="ch">'+r.h+' h</td></tr>'; });
-      html+='<tr class="tr"><td colspan="2"><strong>TOTAL</strong></td><td class="ch"><strong>'+tot+' h</strong></td></tr>'
-        +'</tbody></table></div>';
+
+  // ── Génération du HTML d'impression ───────────────────────────────────────
+  var etab  = params.etablissement || 'Lycée Polyvalent Léopold Elfort';
+  var ville = params.ville || 'Mana';
+  var annee = params.annee || '2026-2027';
+  var module = isSep ? 'SEP — Section d\'Enseignement Professionnel' : 'LGT · BTS — Lycée Général & Technologique';
+  var accentColor = isSep ? '#1A4F7A' : '#0B1F40';
+
+  var css = [
+    '*{box-sizing:border-box;margin:0;padding:0;}',
+    '@page{size:A4 portrait;margin:12mm 16mm;}',
+    'body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:9.5pt;color:#1a1a1a;background:#fff;}',
+    /* En-tête de document par discipline */
+    '.disc-section{margin-bottom:0;}',
+    '.disc-section+.disc-section{page-break-before:always;}',
+    '.disc-header{background:'+accentColor+';color:#fff;padding:10px 14px 8px;margin-bottom:10px;}',
+    '.disc-header h1{font-size:11.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;}',
+    '.disc-header .sub{font-size:7.5pt;opacity:.65;margin-top:2px;display:flex;gap:16px;}',
+    '.disc-header .badge{display:inline-block;background:rgba(255,255,255,.18);',
+    '  border:1px solid rgba(255,255,255,.3);border-radius:10px;',
+    '  padding:1px 8px;font-size:7pt;font-weight:bold;letter-spacing:.3px;}',
+    /* Bloc professeur */
+    '.prof-block{border:1px solid #ccc;margin-bottom:10px;page-break-inside:avoid;}',
+    '.prof-header{background:#f4f4f4;border-bottom:1px solid #ccc;padding:6px 10px;',
+    '  display:flex;justify-content:space-between;align-items:flex-start;}',
+    '.prof-name{font-size:10.5pt;font-weight:bold;text-transform:uppercase;color:'+accentColor+';}',
+    '.prof-meta{font-size:7.5pt;color:#555;margin-top:2px;display:flex;gap:10px;flex-wrap:wrap;}',
+    '.prof-meta span strong{color:#111;}',
+    '.kpi-row{display:flex;gap:6px;align-items:center;margin-top:0;}',
+    '.kpi{background:#fff;border:1px solid #ddd;border-radius:3px;padding:2px 7px;',
+    '  font-size:7.5pt;color:#333;}',
+    '.kpi strong{font-size:8.5pt;color:'+accentColor+';}',
+    '.kpi.hsa strong{color:#c45c0a;}',
+    '.kpi.ok strong{color:#1a6b3c;}',
+    '.kpi.exc strong{color:#b52318;}',
+    /* Tableau */
+    'table{width:100%;border-collapse:collapse;font-size:8.5pt;}',
+    'thead tr{background:'+accentColor+';color:#fff;}',
+    'th{padding:4px 7px;text-align:left;font-weight:600;font-size:8pt;border:1px solid rgba(255,255,255,.2);}',
+    'td{padding:3.5px 7px;border:1px solid #ddd;vertical-align:middle;}',
+    'tr:nth-child(even) td{background:#f9f9f9;}',
+    '.td-h{text-align:right;font-weight:600;width:52px;white-space:nowrap;}',
+    '.td-cls{font-weight:600;color:'+accentColor+';width:28%;}',
+    '.td-mat{width:48%;}',
+    '.total-row td{font-weight:bold;background:#e8edf5!important;border-top:2px solid '+accentColor+';}',
+    '.total-row .td-h{font-size:9.5pt;}',
+    /* Pied */
+    '.doc-footer{font-size:6.5pt;color:#bbb;text-align:center;margin-top:16px;',
+    '  padding-top:6px;border-top:1px solid #eee;}',
+  ].join('');
+
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+    + '<title>Répartition de service — '+etab+'</title>'
+    + '<style>'+css+'</style></head><body>';
+
+  discPages.forEach(function(dp, dIdx) {
+    var totalDiscH = dp.profData.reduce(function(s,p){ return s + p.totalH; }, 0);
+    var nbProfs    = dp.profData.length;
+
+    html += '<div class="disc-section">';
+    html += '<div class="disc-header">'
+      + '<h1>Répartition des services — '+dp.label
+        +' <span class="badge">'+dp.code+'</span></h1>'
+      + '<div class="sub">'
+        + '<span>'+etab+'</span>'
+        + '<span>'+module+'</span>'
+        + '<span>Année scolaire '+annee+'</span>'
+        + '<span>'+nbProfs+' enseignant'+(nbProfs>1?'s':'')+' — '+fh(totalDiscH)+' h au total</span>'
+      + '</div>'
+      + '</div>';
+
+    dp.profData.forEach(function(p) {
+      var statusClass = p.hsa > 0 ? 'exc' : (p.reste > 0 ? 'hsa' : 'ok');
+      var statusLabel = p.hsa > 0
+        ? ('HSA : +'+fh(p.hsa)+' h')
+        : (p.reste > 0 ? ('Reste : '+fh(p.reste)+' h') : 'Service complet');
+
+      html += '<div class="prof-block">'
+        + '<div class="prof-header">'
+          + '<div>'
+            + '<div class="prof-name">'+p.nom+(p.prenom ? ' '+p.prenom : '')+'</div>'
+            + '<div class="prof-meta">'
+              + '<span>Quotité : <strong>'+fh(p.quotite)+' h</strong></span>'
+              + '<span>Validées : <strong>'+fh(p.totalH)+' h</strong></span>'
+              + (p.hsa  > 0 ? '<span style="color:#c45c0a;">HSA : <strong>+'+fh(p.hsa)+' h</strong></span>' : '')
+              + (p.reste > 0 ? '<span style="color:#1a6b3c;">Reste : <strong>'+fh(p.reste)+' h</strong></span>' : '')
+            + '</div>'
+          + '</div>'
+          + '<div class="kpi-row">'
+            + '<div class="kpi '+statusClass+'"><strong>'+statusLabel+'</strong></div>'
+          + '</div>'
+        + '</div>'
+        + '<table>'
+          + '<thead><tr>'
+            + '<th class="td-cls">Classe</th>'
+            + '<th class="td-mat">Matière</th>'
+            + '<th class="td-h">H</th>'
+          + '</tr></thead>'
+          + '<tbody>';
+
+      p.rows.forEach(function(r) {
+        html += '<tr>'
+          + '<td class="td-cls">'+r.classe+'</td>'
+          + '<td class="td-mat">'+r.matiere+'</td>'
+          + '<td class="td-h">'+fh(r.h)+' h</td>'
+          + '</tr>';
+      });
+
+      html += '</tbody>'
+        + '<tfoot><tr class="total-row">'
+          + '<td colspan="2"><strong>TOTAL SERVICE</strong></td>'
+          + '<td class="td-h"><strong>'+fh(p.totalH)+' h</strong></td>'
+        + '</tr></tfoot>'
+        + '</table></div>';
     });
-    html+='</div>';
+
+    html += '</div>'; // /disc-section
   });
-  html+='<div class="ft">'+etab+' · '+ville+' · Répartition de service · '+annee+' · Document à usage interne</div></body></html>';
-  var win=window.open('','_blank');
+
+  html += '<div class="doc-footer">'
+    + etab+' · '+ville+' · Répartition de service · '+annee
+    + ' · Document à usage interne — généré le '
+    + new Date().toLocaleDateString('fr-FR')
+    + '</div></body></html>';
+
+  var win = window.open('', '_blank');
   if(!win){ showHubToast('Autorisez les pop-ups pour générer le PDF.'); return; }
-  win.document.write(html); win.document.close();
-  setTimeout(function(){ win.print(); }, 600);
+  win.document.write(html);
+  win.document.close();
+  setTimeout(function(){ win.focus(); win.print(); }, 700);
 };
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -1258,7 +1430,7 @@ input.h-input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 2px 
   color:#fff;font-family:'Outfit',sans-serif;
   font-size:14px;font-weight:600;letter-spacing:.3px;
 }
-.repartition-disc-body{background:var(--surface);border-radius:0 0 var(--r) var(--r);overflow-x:auto;box-shadow:var(--shadow-card);}
+.repartition-disc-body{background:var(--surface);border-radius:0 0 var(--r) var(--r);overflow:auto;max-height:72vh;box-shadow:var(--shadow-card);}
 .rep-table{width:100%;border-collapse:collapse;font-size:12px;}
 .rep-table th{
   padding:8px 10px;font-size:11px;font-weight:700;
@@ -1266,17 +1438,18 @@ input.h-input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 2px 
   border-bottom:2px solid rgba(0,0,0,.1);
   border-right:1px solid rgba(255,255,255,.12);
   text-align:center;
+  position:sticky;top:0;z-index:10;
 }
-.rep-table th.rep-th-row{text-align:left;background:var(--ink);color:#fff;min-width:130px;}
-.rep-table th.rep-th-mat{text-align:left;background:var(--ink2);color:rgba(255,255,255,.85);min-width:160px;}
+.rep-table th.rep-th-row{text-align:left;background:var(--ink);color:#fff;width:130px;min-width:130px;position:sticky;top:0;left:0;z-index:22;}
+.rep-table th.rep-th-mat{text-align:left;background:var(--ink2);color:rgba(255,255,255,.85);width:160px;min-width:160px;position:sticky;top:0;left:130px;z-index:22;}
 .rep-table th.rep-th-prof{background:var(--ink3);color:#fff;min-width:90px;}
 .rep-table th.rep-th-total{background:#1A3050;color:var(--amber2);min-width:70px;}
 .rep-table td{
   padding:6px 10px;border-bottom:1px solid var(--border2);
   border-right:1px solid var(--border2);vertical-align:middle;
 }
-.rep-table td.rep-td-classe{font-weight:700;color:var(--ink);background:#F0F4FF;white-space:nowrap;}
-.rep-table td.rep-td-mat{color:var(--text);font-size:11.5px;background:#FAFBFF;}
+.rep-table td.rep-td-classe{font-weight:700;color:var(--ink);background:#F0F4FF;white-space:nowrap;position:sticky;left:0;z-index:4;box-shadow:2px 0 4px rgba(0,0,0,.06);}
+.rep-table td.rep-td-mat{color:var(--text);font-size:11.5px;background:#FAFBFF;position:sticky;left:130px;z-index:4;}
 .rep-table td.rep-td-h{text-align:center;font-weight:700;font-size:13px;font-family:'DM Mono',monospace;}
 .rep-table td.rep-td-h.has-h{color:var(--ink3);background:#E8F0FF;}
 .rep-table td.rep-td-total{text-align:center;font-weight:700;background:#E0E8F8;color:var(--ink);}
@@ -1548,7 +1721,7 @@ input.h-input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 2px 
       <label class="btn btn-sm" style="background:rgba(201,144,42,.85);color:#fff;border:none;cursor:pointer;" title="Charger une sauvegarde JSON"><i class="fa-solid fa-folder-open"></i> Charger <input type="file" accept=".json" style="display:none" onchange="loadFromFile(event)"></label>
       <label class="btn btn-sm" style="background:rgba(100,180,100,.85);color:#fff;border:none;cursor:pointer;" title="Importer les affectations d'une équipe disciplinaire"><i class="fa-solid fa-file-import"></i> Import équipe <input type="file" accept=".json" style="display:none" onchange="importEquipeFile(event)"></label>
       <button class="btn btn-sm" style="background:rgba(52,73,150,.9);color:#fff;border:none;font-weight:700;" onclick="generateEquipeFile()" title="Générer un fichier HTML autonome pour les équipes disciplinaires"><i class="fa-solid fa-share-nodes"></i> Générer fichier Équipe</button>
-      <button class="btn btn-sm" style="background:var(--green);color:#fff;border:none;" onclick="exportData()" title="Sauvegarder JSON"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder</button>
+      <button class="btn btn-sm" style="background:#1a7a46;color:#fff;border:none;font-weight:700;" onclick="exportData()" title="Sauvegarder toutes les données (fichier JSON — clé USB, autre ordinateur)"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder tout</button>
       <button class="btn btn-sm" style="background:rgba(192,57,43,.85);color:#fff;border:none;" onclick="resetAllData()" title="Réinitialiser toutes les données"><i class="fa-solid fa-rotate-left"></i> Réinitialiser</button>
     </span>
     <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="printPage()"><i class="fa-solid fa-print"></i></button>
@@ -1727,7 +1900,7 @@ input.h-input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 2px 
       <option value="">Toutes les disciplines</option>
     </select>
     <button class="btn btn-sm btn-primary" onclick="renderRepartition()"><i class="fa-solid fa-arrows-rotate"></i> Recalculer</button>
-    <button class="btn btn-sm" style="background:#c0392b;color:#fff;border:none;" onclick="if(window.parent&&window.parent.hubGeneratePDF){var _e=document.getElementById(&quot;rep-filter-disc&quot;);window.parent.hubGeneratePDF(_e?_e.value:&quot;&quot;);}"><i class="fa-solid fa-file-pdf"></i> PDF discipline</button>
+    <button class="btn btn-sm" style="background:#c0392b;color:#fff;border:none;" onclick="var _d=document.getElementById('rep-filter-disc');if(_d&&_d.value)genServicePDF(_d.value);else showToast('Sélectionnez une discipline.','warning');"><i class="fa-solid fa-file-pdf"></i> Récapitulatif PDF par prof</button>
   </div>
 
   <div id="repartition-content"></div>
@@ -5170,6 +5343,16 @@ function repSave(){
   saveState();
 }
 
+// Vider toutes les saisies d'une discipline (LGT)
+function clearDiscAffectLGT(discCode, discLabel){
+  if(!confirm('⚠️  Supprimer toutes les heures saisies pour "'+discLabel+'" ?\n\nCette action effacera toutes les affectations de cette discipline uniquement.\nCette opération est irréversible.')) return;
+  if(!state.repAffectations) state.repAffectations={};
+  state.repAffectations[discCode]={};
+  repSave();
+  repRefreshDisc(discCode);
+  showToast('<i class="fa-solid fa-eraser"></i>&nbsp; Affectations de <strong>'+discLabel+'</strong> effacées.','info');
+}
+
 // Called when user clicks a prof cell to toggle affectation
 function repToggleCell(discCode, rowKey, profId){
   if(!state.repAffectations[discCode]) state.repAffectations[discCode]={};
@@ -5193,6 +5376,9 @@ function repToggleCell(discCode, rowKey, profId){
       da[rowKey][profId]=0;
     }
   }
+  // Scroll the table back to left to show frozen columns
+  const body = document.querySelector('.repartition-disc-body');
+  if(body) body.scrollLeft = 0;
   repSave();
   repRefreshDisc(discCode);
 }
@@ -5311,13 +5497,17 @@ function renderRepartition(){
       <div class="suivi-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
       <span style="font-size:16px;">\${disc.label}</span>
       <span style="font-size:11px;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:10px;margin-left:8px;">\${disc.code}</span>
-      <div style="margin-left:auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
         <span style="font-size:12px;opacity:.85;">Besoins : <strong>\${h(besoinsTotal)} h</strong></span>
         <span style="font-size:12px;opacity:.85;">Couverts : <strong>\${h(coveredTotal)} h</strong></span>
         <span style="background:rgba(255,255,255,.22);padding:3px 11px;border-radius:12px;font-size:12px;font-weight:700;
           color:\${Math.abs(coveredTotal-besoinsTotal)<0.01?'#aee6c5':coveredTotal>besoinsTotal?'#f5a0a0':'#f9ca91'};">
           \${profs.length} ens.&nbsp;·&nbsp;écart \${coveredTotal>=besoinsTotal?'':'+'}\${h(besoinsTotal-coveredTotal)} h
         </span>
+        <button data-code="\${disc.code}" data-label="\${disc.label}" onclick="clearDiscAffectLGT(this.dataset.code,this.dataset.label)"
+          style="background:rgba(231,76,60,.75);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;">
+          <i class="fa-solid fa-eraser"></i> Vider les saisies
+        </button>
       </div>\`;
     blockDiv.appendChild(headDiv);
 
@@ -5343,7 +5533,7 @@ function renderRepartition(){
       };
       tr1.appendChild(mkTh('Niveau / Classe','rep-th-row',2,1));
       tr1.appendChild(mkTh('Matière','rep-th-mat',2,1));
-      tr1.appendChild(mkTh('Total<br><small style="font-weight:400;">h allouées</small>','rep-th-total',2,1,'text-align:center;'));
+      tr1.appendChild(mkTh('Total<br><small style="font-weight:400;">h allouées</small>','rep-th-total',2,1,'text-align:center;position:sticky;top:0;left:290px;z-index:22;width:70px;min-width:70px;'));
       if(profs.length){
         tr1.appendChild(mkTh('Enseignants de la discipline','rep-th-prof',1,profs.length,'border-left:2px solid rgba(255,255,255,.25);'));
       }
@@ -5427,7 +5617,7 @@ function renderRepartition(){
             // Total h cell
             const tdH=tr.insertCell();
             tdH.className='rep-td-total';
-            tdH.style.fontWeight='700';
+            tdH.style.cssText='font-weight:700;position:sticky;left:290px;z-index:4;background:#E0E8F8;';
             tdH.textContent=h(r.hProf)+' h';
 
             // Per-prof cells
@@ -5874,6 +6064,186 @@ function importEquipeFile(event){
   reader.readAsText(file);
 }
 
+/* ─── PDF Récapitulatif de service par professeur (LGT) ─── */
+function genServicePDF(discCode){
+  var disc = DISC_REF.find(function(d){ return d.code === discCode; });
+  if(!disc) return;
+  var profs = getProfsForDisc(discCode).sort(function(a,b){ return (a.nom||'').localeCompare(b.nom||''); });
+  if(!profs.length){ showToast('Aucun enseignant affecté à cette discipline.','warning'); return; }
+
+  var niveauxOrder = ['2NDE GT','1ère Générale','1ère TECHNO','Term. Générale','Term. TECHNO','BTS'];
+  var allNiveaux = Array.from(new Set(niveauxOrder.concat(state.classes.map(function(c){ return c.niveau; }))));
+  var allRows = [];
+  allNiveaux.forEach(function(niv){
+    var classes = state.classes.filter(function(c){ return c.niveau===niv; }).sort(function(a,b){ return a.label.localeCompare(b.label); });
+    classes.forEach(function(cls){
+      var grille = getClasseGrille(cls.label, niv);
+      var stdRows = GRILLES[niv] || [];
+      grille.forEach(function(row, i){
+        if(row._hidden===true) return;
+        var stdRow = row._isExtra ? null : stdRows[i];
+        var matLabel = row._mat || (stdRow ? stdRow.mat : '—');
+        [[row.disc1,row.h1],[row.disc2,row.h2],[row.disc3,row.h3],[row.disc4,row.h4]].forEach(function(pair){
+          var dc=pair[0], hh=pair[1];
+          if(dc===discCode && (hh||0)>0){
+            var rowKey = cls.label+'||'+matLabel+'||'+hh;
+            allRows.push({ classeLabel: cls.label, matiere: matLabel, hProf: hh||0, rowKey: rowKey });
+          }
+        });
+      });
+    });
+  });
+
+  var da = ((state.repAffectations||{})[discCode]) || {};
+  var sp = state.params || {};
+  var etab = sp.etablissement || 'Lycée Polyvalent Léopold Elfort';
+  var annee = sp.annee || '2026-2027';
+  var ac = disc.color || '#0B1F40';
+
+  function fh(v){ var n=parseFloat(v)||0; return n%1===0?n.toFixed(0):n.toFixed(1); }
+  function getProfH(rowKey, profId){
+    var assigns = da[rowKey] || {};
+    var v = assigns[String(profId)];
+    if(v===undefined) v = assigns[profId];
+    if(v===undefined||v===false) return 0;
+    if(typeof v==='number') return v;
+    var pts=rowKey.split('||'); return parseFloat(pts[2])||0;
+  }
+
+  var profData = [];
+  profs.forEach(function(prof){
+    var svc = serviceEffectif(prof);
+    var rows = [];
+    allRows.forEach(function(r){
+      var hh = getProfH(r.rowKey, prof.id);
+      if(hh > 0) rows.push({ classe: r.classeLabel, matiere: r.matiere, h: hh });
+    });
+    if(!rows.length) return;
+    rows.sort(function(a,b){ var c=(a.classe||'').localeCompare(b.classe||''); return c!==0?c:(a.matiere||'').localeCompare(b.matiere||''); });
+    var totalH = rows.reduce(function(s,r){ return s+r.h; }, 0);
+    var pond   = getPonderationReelle(prof.id, discCode);
+    var svcPond = pond.serviceTotal || totalH;
+    var hsa    = Math.max(0, Math.round((svcPond-svc)*2)/2);
+    var reste  = Math.max(0, Math.round((svc-svcPond)*2)/2);
+    profData.push({ nom: prof.nom||'', prenom: prof.prenom||'', svc: svc, totalH: totalH, hsa: hsa, reste: reste, rows: rows, pond: pond });
+  });
+
+  if(!profData.length){ showToast('Aucune affectation saisie pour cette discipline.','warning'); return; }
+
+  var css = [
+    '*{box-sizing:border-box;margin:0;padding:0;}',
+    '@page{size:A4 portrait;margin:12mm 16mm;}',
+    'body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:9.5pt;color:#1a1a1a;background:#fff;}',
+    '.disc-header{background:'+ac+';color:#fff;padding:10px 14px 8px;margin-bottom:14px;}',
+    '.disc-header h1{font-size:12pt;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;}',
+    '.badge{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:1px 8px;font-size:7pt;font-weight:bold;}',
+    '.sub{font-size:7.5pt;opacity:.75;margin-top:3px;display:flex;gap:14px;}',
+    '.prof-block{border:1px solid #ccc;margin-bottom:10px;page-break-inside:avoid;}',
+    '.prof-header{background:#f4f4f4;border-bottom:1px solid #ccc;padding:6px 10px;display:flex;justify-content:space-between;align-items:flex-start;}',
+    '.prof-name{font-size:11pt;font-weight:bold;text-transform:uppercase;color:'+ac+';}',
+    '.prof-meta{font-size:7.5pt;color:#555;margin-top:3px;display:flex;gap:12px;flex-wrap:wrap;}',
+    '.prof-meta span strong{color:#111;}',
+    '.kpi{border:1px solid #ddd;border-radius:3px;padding:3px 10px;font-size:8pt;}',
+    '.kpi.ok strong{color:#1a6b3c;} .kpi.exc strong{color:#b52318;} .kpi.dft strong{color:#c45c0a;}',
+    'table{width:100%;border-collapse:collapse;font-size:8.5pt;}',
+    'thead tr{background:'+ac+';color:#fff;}',
+    'th{padding:4px 7px;text-align:left;font-weight:600;font-size:8pt;border:1px solid rgba(0,0,0,.1);}',
+    'td{padding:3.5px 7px;border:1px solid #ddd;vertical-align:middle;}',
+    'tr:nth-child(even) td{background:#f9f9f9;}',
+    '.td-cls{font-weight:600;color:'+ac+';width:35%;}',
+    '.td-mat{width:45%;}',
+    '.td-h{text-align:right;font-weight:600;width:20%;white-space:nowrap;}',
+    '.total-row td{font-weight:bold;background:#e2ecf5!important;border-top:2px solid '+ac+';}',
+    '.pond-row td{background:#fff8e6!important;border-top:1px dashed #d4a942;color:#7a5500;font-size:8pt;font-style:italic;}',
+    '.pond-row .td-h{font-style:normal;font-weight:600;}',
+    '.total-pond-row td{font-weight:bold;background:#fdf0cc!important;border-top:2px solid #c98b3c;color:#5a3e00;}',
+    '.footer{font-size:6.5pt;color:#aaa;text-align:center;margin-top:20px;padding-top:6px;border-top:1px solid #eee;}',
+  ].join('');
+
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+    + '<title>Répartition de service — '+disc.label+'</title>'
+    + '<style>'+css+'</style></head><body>';
+
+  html += '<div class="disc-header">'
+    + '<h1>Répartition des services &mdash; '+disc.label+' <span class="badge">'+disc.code+'</span></h1>'
+    + '<div class="sub">'
+      + '<span>'+etab+'</span>'
+      + '<span>LGT &mdash; Lycée Général &amp; Technologique</span>'
+      + '<span>Année scolaire '+annee+'</span>'
+      + '<span>'+profData.length+' enseignant'+(profData.length>1?'s':'')+' &nbsp;&middot;&nbsp; '
+        +fh(profData.reduce(function(s,p){ return s+p.totalH; },0))+' h au total</span>'
+    + '</div></div>';
+
+  profData.forEach(function(p){
+    var hasPond = p.pond && p.pond.hPondRetenue > 0;
+    var svcPond = hasPond ? p.pond.serviceTotal : p.totalH;
+    var stCls = p.hsa>0?'exc':(p.reste>0?'dft':'ok');
+    var stLbl = p.hsa>0?('HSA : +'+fh(p.hsa)+' h'):(p.reste>0?('Reste : '+fh(p.reste)+' h'):'Service complet ✓');
+    var pondDetail = '';
+    if(hasPond){
+      var parts = [];
+      if(p.pond.hTerminal > 0) parts.push(fh(p.pond.hTerminal)+' h term. (\xd71,1)');
+      if(p.pond.hBTS > 0)      parts.push(fh(p.pond.hBTS)+' h BTS (\xd71,25)');
+      pondDetail = parts.join(' + ');
+    }
+    html += '<div class="prof-block">'
+      + '<div class="prof-header">'
+        + '<div>'
+          + '<div class="prof-name">'+p.nom+(p.prenom?' '+p.prenom:'')+'</div>'
+          + '<div class="prof-meta">'
+            + '<span>Quotit\xe9 : <strong>'+fh(p.svc)+' h</strong></span>'
+            + '<span>Total brut : <strong>'+fh(p.totalH)+' h</strong></span>'
+            + (hasPond ? '<span style="color:#7a5500;">Pond\xe9ration : <strong>+'+fh(p.pond.hPondRetenue)+' h</strong></span>' : '')
+            + (hasPond ? '<span>Svc pond\xe9r\xe9 : <strong>'+fh(svcPond)+' h</strong></span>' : '')
+            + (p.hsa>0?'<span style="color:#b52318;">HSA : <strong>+'+fh(p.hsa)+' h</strong></span>':'')
+            + (p.reste>0?'<span style="color:#1a6b3c;">Reste : <strong>'+fh(p.reste)+' h</strong></span>':'')
+          + '</div>'
+        + '</div>'
+        + '<div class="kpi '+stCls+'"><strong>'+stLbl+'</strong></div>'
+      + '</div>'
+      + '<table>'
+        + '<thead><tr>'
+          + '<th class="td-cls">Classe</th>'
+          + '<th class="td-mat">Mati\xe8re</th>'
+          + '<th class="td-h">Heures</th>'
+        + '</tr></thead><tbody>';
+    p.rows.forEach(function(r){
+      html += '<tr>'
+        + '<td class="td-cls">'+r.classe+'</td>'
+        + '<td class="td-mat">'+r.matiere+'</td>'
+        + '<td class="td-h">'+fh(r.h)+' h</td>'
+        + '</tr>';
+    });
+    html += '</tbody><tfoot>';
+    html += '<tr class="total-row">'
+      + '<td colspan="2"><strong>TOTAL SERVICE BRUT</strong></td>'
+      + '<td class="td-h"><strong>'+fh(p.totalH)+' h</strong></td>'
+      + '</tr>';
+    if(hasPond){
+      html += '<tr class="pond-row">'
+        + '<td colspan="2">Majoration pond\xe9ration'+(pondDetail?' — '+pondDetail:'')+'</td>'
+        + '<td class="td-h">+'+fh(p.pond.hPondRetenue)+' h</td>'
+        + '</tr>';
+      html += '<tr class="total-pond-row">'
+        + '<td colspan="2"><strong>SERVICE TOTAL POND\xc9R\xc9</strong></td>'
+        + '<td class="td-h"><strong>'+fh(svcPond)+' h</strong></td>'
+        + '</tr>';
+    }
+    html += '</tfoot></table></div>';
+  });
+
+  html += '<div class="footer">'
+    + etab+' &bull; LGT &bull; R\xe9partition de service &bull; '+annee
+    + ' &bull; Document à usage interne &mdash; généré le '+new Date().toLocaleDateString('fr-FR')
+    + '</div></body></html>';
+
+  var win = window.open('about:blank','_blank');
+  if(!win){ showToast('Autorisez les pop-ups pour générer le PDF.','warning'); return; }
+  win.document.write(html);
+  win.document.close();
+  setTimeout(function(){ win.focus(); win.print(); }, 700);
+}
+
 /* ═══════════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════════ */
@@ -6000,7 +6370,8 @@ main{padding:20px 24px;max-width:1600px;margin:0 auto;}
 .panel-body{padding:16px 18px;}
 
 /* ─── TABLES ─── */
-.tbl-wrap{overflow-x:auto;}
+.tbl-wrap{overflow-x:auto;overflow-y:auto;max-height:72vh;}
+.tbl-wrap .grille-table thead th{position:sticky;top:0;z-index:10;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 th{background:linear-gradient(135deg,var(--navy2),var(--navy));color:#fff;padding:9px 11px;text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.4px;white-space:nowrap;font-family:'Outfit',sans-serif;}
 td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
@@ -6509,7 +6880,7 @@ body.print-landscape-ventilation { }
       <button class="btn btn-sm" style="background:rgba(30,140,78,.92);color:#fff;border:none;font-weight:700;" onclick="generateEquipeFile()" title="Générer un fichier HTML autonome à transmettre aux professeurs"><i class="fa-solid fa-people-arrows"></i> Générer fichier équipe</button>
       <button class="btn btn-sm" style="background:rgba(41,128,185,.85);color:#fff;border:none;" onclick="generatePPTX()" title="Présentation PPTX"><i class="fa-solid fa-file-powerpoint"></i> Présentation</button>
       <label class="btn btn-sm" style="background:rgba(201,144,42,.85);color:#fff;border:none;cursor:pointer;" title="Charger une sauvegarde JSON"><i class="fa-solid fa-folder-open"></i> Charger <input type="file" accept=".json" style="display:none" onchange="loadFromFile(event)"></label>
-      <button class="btn btn-sm" style="background:rgba(30,140,78,.85);color:#fff;border:none;" onclick="exportData()" title="Sauvegarder JSON"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder</button>
+      <button class="btn btn-sm" style="background:#1a7a46;color:#fff;border:none;font-weight:700;" onclick="exportData()" title="Sauvegarder toutes les données (fichier JSON — clé USB, autre ordinateur)"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder tout</button>
       <button class="btn btn-sm" style="background:rgba(192,57,43,.85);color:#fff;border:none;" onclick="resetAllData()" title="Réinitialiser toutes les données"><i class="fa-solid fa-rotate-left"></i> Réinitialiser</button>
       <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="printPage()"><i class="fa-solid fa-print"></i></button>
     </div>
@@ -6956,7 +7327,6 @@ body.print-landscape-ventilation { }
     <select id="rep-disc-select" onchange="renderRepartitionTable()" style="border:1.5px solid var(--border);border-radius:4px;padding:7px 12px;font-size:13px;color:var(--text);background:#fff;min-width:220px;"></select>
   </div>
 
-  <div class="no-print" style="margin-bottom:10px;"><button class="btn btn-sm" style="background:#c0392b;color:#fff;border:none;" onclick="if(window.parent&&window.parent.hubGeneratePDF){var _e=document.getElementById(&quot;rep-disc-select&quot;);window.parent.hubGeneratePDF(_e?_e.value:&quot;&quot;);}"><i class="fa-solid fa-file-pdf"></i> PDF discipline</button></div>
   <div id="rep-content"></div>
 </section>
 
@@ -10004,12 +10374,14 @@ function renderRepartitionTable(){
     +'<div class="panel">'
     +'<div class="panel-head" style="background:var(--navy2);">'
     +'<span class="panel-title"><i class="fa-solid fa-table-columns"></i> '+disc.label+' \\u2014 '+profs.length+' enseignant(s)</span>'
-    +'<div style="display:flex;gap:6px;">'
+    +'<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">'
     +(_currentMode!=='equipe' ? '<button class="btn btn-sm btn-success" onclick="exportRepCSV(\\''+discCode+'\\')"><i class="fa-solid fa-file-csv"></i> CSV</button>' : '')
+    +'<button class="btn btn-sm" style="background:#c0392b;color:#fff;border:none;" onclick="genServicePDF(\\''+discCode+'\\')" title="Récapitulatif PDF par professeur"><i class="fa-solid fa-file-pdf"></i> Récapitulatif PDF</button>'
     +'<button class="btn btn-sm btn-info" onclick="exportRepJSON(\\''+discCode+'\\')" style="'+(_currentMode==='equipe'?'background:var(--navy);color:#fff;font-weight:700;border:none;padding:6px 14px;':'')+'">'
     +(_currentMode==='equipe' ? '<i class="fa-solid fa-file-arrow-up"></i> Répartition de service à transmettre' : '<i class="fa-solid fa-file-code"></i> JSON')
     +'</button>'
     +'<button class="btn btn-sm no-print" style="background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="printRepartition()"><i class="fa-solid fa-print"></i> Imprimer</button>'
+    +(_currentMode!=='equipe' ? '<button class="btn btn-sm no-print" style="background:rgba(231,76,60,.7);color:#fff;border:none;" onclick="clearDiscAffectSEP(\\''+discCode+'\\',\\''+disc.label.replace(/'/g,"\\\\\\'")+'\\')"><i class="fa-solid fa-eraser"></i> Vider</button>' : '')
     +'</div></div>'
     +'<div class="panel-body" style="padding:0;">'
     // Légende H. élève
@@ -10024,11 +10396,11 @@ function renderRepartitionTable(){
     +'<div class="tbl-wrap">'
     +'<table class="grille-table" style="font-size:12px;">'
     +'<thead><tr>'
-    +'<th rowspan="2" style="min-width:50px;vertical-align:middle;">Niveau</th>'
-    +'<th rowspan="2" style="min-width:120px;vertical-align:middle;">Classe</th>'
-    +'<th rowspan="2" style="min-width:80px;vertical-align:middle;">Catégorie</th>'
-    +'<th rowspan="2" style="min-width:130px;vertical-align:middle;">Matière</th>'
-    +'<th rowspan="2" style="text-align:center;vertical-align:middle;background:#e8f4f8;color:var(--navy);">H.\\u00a0élève</th>'
+    +'<th rowspan="2" style="position:sticky;top:0;left:0;z-index:22;min-width:50px;width:50px;vertical-align:middle;">Niveau</th>'
+    +'<th rowspan="2" style="position:sticky;top:0;left:50px;z-index:22;min-width:120px;width:120px;vertical-align:middle;">Classe</th>'
+    +'<th rowspan="2" style="position:sticky;top:0;left:170px;z-index:22;min-width:80px;width:80px;vertical-align:middle;">Catégorie</th>'
+    +'<th rowspan="2" style="position:sticky;top:0;left:250px;z-index:22;min-width:130px;width:130px;vertical-align:middle;">Matière</th>'
+    +'<th rowspan="2" style="position:sticky;top:0;left:380px;z-index:22;text-align:center;vertical-align:middle;background:#e8f4f8;color:var(--navy);min-width:100px;width:100px;">H.\\u00a0élève</th>'
     +'<th rowspan="2" style="text-align:center;vertical-align:middle;background:#1a5276;color:#fff;min-width:58px;">H.\\u00a0prof</th>'
     +'<th rowspan="2" style="text-align:center;vertical-align:middle;background:#1a4a7a;color:#fff;min-width:62px;">H.\\u00a0disc.</th>'
     +(profs.length > 0 ? '<th colspan="'+profs.length+'" style="text-align:center;background:#142850;color:var(--gold2);">Affectation enseignants — cliquer pour activer, puis saisir les heures</th>' : '')
@@ -10093,13 +10465,13 @@ function renderRepartitionTable(){
     const reste = Math.max(0, r.heuresDisc - totalAffecte);
 
     html += '<tr class="rep-row-'+r.niveau.replace(/[^a-z0-9]/gi,'_')+'" style="'+display+'">'
-      +'<td style="font-size:11px;color:var(--muted);background:'+bg+';">'+r.niveau+'</td>'
-      +'<td style="font-weight:600;background:'+bg+';">'+r.classeLabel+'</td>'
-      +'<td style="font-size:11px;color:var(--muted);background:'+bg+';">'+r.cat+'</td>'
-      +'<td style="background:'+bg+';">'+r.mat
+      +'<td style="position:sticky;left:0;z-index:3;font-size:11px;color:var(--muted);background:'+bg+';width:50px;">'+r.niveau+'</td>'
+      +'<td style="position:sticky;left:50px;z-index:3;font-weight:600;background:'+bg+';width:120px;">'+r.classeLabel+'</td>'
+      +'<td style="position:sticky;left:170px;z-index:3;font-size:11px;color:var(--muted);background:'+bg+';width:80px;">'+r.cat+'</td>'
+      +'<td style="position:sticky;left:250px;z-index:3;background:'+bg+';width:130px;box-shadow:2px 0 4px rgba(0,0,0,.06);">'+r.mat
         +(totalAffecte > 0 ? '<br><span style="font-size:10px;color:var(--muted);">'+h(totalAffecte)+'/'+h(r.heuresDisc)+'h affectées'+(reste>0?' — reste '+h(reste)+'h':'')+'</span>' : '')
       +'</td>'
-      +'<td style="text-align:center;background:#f0f8fc;font-size:11px;white-space:nowrap;">'+hEleve+'</td>'
+      +'<td style="position:sticky;left:380px;z-index:3;text-align:center;background:#f0f8fc;font-size:11px;white-space:nowrap;width:100px;">'+hEleve+'</td>'
       +'<td style="text-align:center;font-weight:700;color:var(--navy);">'+h(r.totalProfH)+'</td>'
       +'<td style="text-align:center;font-weight:700;color:var(--blue);">'+h(r.heuresDisc)+'</td>'
       +profs.map(p => {
@@ -10116,7 +10488,7 @@ function renderRepartitionTable(){
           content = '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">'
             +'<i class="fa-solid fa-circle-check" style="color:var(--green);font-size:13px;cursor:pointer;" onclick="repToggleProf(\\''+discCode+'\\',\\''+safeKey+'\\','+p.id+','+r.heuresDisc+')" title="Désaffecter"></i>'
             +'<input type="number" min="0" max="'+r.heuresDisc+'" step="0.5" value="'+profH+'"'
-            +' data-rep-key="'+safeKey+'" data-rep-pid="'+p.id+'" data-rep-max="'+r.heuresDisc+'"'
+            +' data-rep-key="'+r.rowKey+'" data-rep-pid="'+p.id+'" data-rep-max="'+r.heuresDisc+'"'
             +' style="width:52px;border:1.5px solid var(--green);border-radius:3px;padding:2px 4px;text-align:center;font-size:11px;font-weight:700;background:#f0fff4;"'
             +' onchange="repSetH(\\''+discCode+'\\',\\''+safeKey+'\\','+p.id+',this.value,'+r.heuresDisc+')"'
             +' oninput="clearTimeout(this._t);this._t=setTimeout(()=>repSetH(\\''+discCode+'\\',\\''+safeKey+'\\','+p.id+',this.value,'+r.heuresDisc+'),600)"'
@@ -10165,6 +10537,16 @@ function repToggleNiveau(niveau, discCode){
   if(icon) icon.className = 'fa-solid '+(window._repCollapsed[niveau] ? 'fa-chevron-right' : 'fa-chevron-down');
 }
 
+// Vider toutes les saisies d'une discipline (SEP)
+function clearDiscAffectSEP(discCode, discLabel){
+  if(!confirm('⚠️  Supprimer toutes les heures saisies pour "'+discLabel+'" ?\n\nCette action effacera toutes les affectations de cette discipline uniquement.\nCette opération est irréversible.')) return;
+  if(!state.repartitionAffect) state.repartitionAffect = {};
+  state.repartitionAffect[discCode] = {};
+  saveState();
+  renderRepartitionTable();
+  showToast('<i class="fa-solid fa-eraser"></i>&nbsp; Affectations de <strong>'+discLabel+'</strong> effacées.','info');
+}
+
 // Activer/désactiver un prof sur une ligne
 function repToggleProf(discCode, rowKey, profId, maxH){
   if(!state.repartitionAffect) state.repartitionAffect = {};
@@ -10183,6 +10565,9 @@ function repToggleProf(discCode, rowKey, profId, maxH){
     const reste = Math.max(0, parseFloat(maxH) - already);
     affect[rowKey][pid] = reste;
   }
+  // Scroll vers la gauche pour voir les colonnes figées
+  const wrap = document.querySelector('.tbl-wrap');
+  if(wrap) wrap.scrollLeft = 0;
   saveState();
   renderRepartitionTable();
 }
@@ -10273,6 +10658,136 @@ function exportRepCSV(discCode){
   a.click();
   URL.revokeObjectURL(url);
   showToast('<i class="fa-solid fa-file-csv"></i>&nbsp; Export CSV <strong>'+disc.short+'</strong> téléchargé.', 'success');
+}
+
+/* ─── PDF Récapitulatif de service par professeur (SEP) ─── */
+function genServicePDF(discCode){
+  var disc = getEffectiveDiscList().find(function(d){ return d.code === discCode; });
+  if(!disc) return;
+  var profs = getProfsForDisc(discCode).sort(function(a,b){ return (a.nom||'').localeCompare(b.nom||''); });
+  if(!profs.length){ showToast('Aucun enseignant affecté à cette discipline.','warning'); return; }
+  var dataRows = buildRepRows(discCode);
+  // Normaliser les clés de l'affect : supprimer backslashs parasites devant apostrophes
+  var rawAffect = ((state.repartitionAffect||{})[discCode]) || {};
+  var affect = {};
+  Object.keys(rawAffect).forEach(function(k){
+    var nk = k.replace(/\\'/g, "'");
+    if(!affect[nk]) affect[nk] = {};
+    Object.entries(rawAffect[k]).forEach(function(entry){
+      var pid = entry[0], v = entry[1];
+      if(parseFloat(v) > 0) affect[nk][pid] = parseFloat(v);
+    });
+  });
+  var sp = state.params || {};
+  var etab = sp.etablissement || 'Lycée Polyvalent Léopold Elfort';
+  var annee = sp.annee || '2026-2027';
+  var ac = '#1A4F7A';
+  function fh(v){ var n=parseFloat(v)||0; return n%1===0?n.toFixed(0):n.toFixed(1); }
+
+  var profData = [];
+  profs.forEach(function(prof){
+    var svc = serviceEffectif(prof);
+    var rows = [];
+    dataRows.forEach(function(r){
+      var hh = repProfH(affect, r.rowKey, prof.id);
+      if(hh > 0) rows.push({ classe: r.classeLabel, matiere: r.mat, h: hh });
+    });
+    if(!rows.length) return;
+    rows.sort(function(a,b){ var c=(a.classe||'').localeCompare(b.classe||''); return c!==0?c:(a.matiere||'').localeCompare(b.matiere||''); });
+    var totalH = rows.reduce(function(s,r){ return s+r.h; }, 0);
+    var hsa    = Math.max(0, Math.round((totalH-svc)*2)/2);
+    var reste  = Math.max(0, Math.round((svc-totalH)*2)/2);
+    profData.push({ nom: prof.nom||'', prenom: prof.prenom||'', svc: svc, totalH: totalH, hsa: hsa, reste: reste, rows: rows });
+  });
+
+  if(!profData.length){ showToast('Aucune affectation saisie pour cette discipline.','warning'); return; }
+
+  var css = [
+    '*{box-sizing:border-box;margin:0;padding:0;}',
+    '@page{size:A4 portrait;margin:12mm 16mm;}',
+    'body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:9.5pt;color:#1a1a1a;background:#fff;}',
+    '.disc-header{background:'+ac+';color:#fff;padding:10px 14px 8px;margin-bottom:14px;}',
+    '.disc-header h1{font-size:12pt;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;}',
+    '.badge{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:1px 8px;font-size:7pt;font-weight:bold;}',
+    '.sub{font-size:7.5pt;opacity:.75;margin-top:3px;display:flex;gap:14px;}',
+    '.prof-block{border:1px solid #ccc;margin-bottom:10px;page-break-inside:avoid;}',
+    '.prof-header{background:#f4f4f4;border-bottom:1px solid #ccc;padding:6px 10px;display:flex;justify-content:space-between;align-items:flex-start;}',
+    '.prof-name{font-size:11pt;font-weight:bold;text-transform:uppercase;color:'+ac+';}',
+    '.prof-meta{font-size:7.5pt;color:#555;margin-top:3px;display:flex;gap:12px;flex-wrap:wrap;}',
+    '.prof-meta span strong{color:#111;}',
+    '.kpi{border:1px solid #ddd;border-radius:3px;padding:3px 10px;font-size:8pt;}',
+    '.kpi.ok strong{color:#1a6b3c;} .kpi.exc strong{color:#b52318;} .kpi.dft strong{color:#c45c0a;}',
+    'table{width:100%;border-collapse:collapse;font-size:8.5pt;}',
+    'thead tr{background:'+ac+';color:#fff;}',
+    'th{padding:4px 7px;text-align:left;font-weight:600;font-size:8pt;border:1px solid rgba(0,0,0,.1);}',
+    'td{padding:3.5px 7px;border:1px solid #ddd;vertical-align:middle;}',
+    'tr:nth-child(even) td{background:#f9f9f9;}',
+    '.td-cls{font-weight:600;color:'+ac+';width:35%;}',
+    '.td-mat{width:45%;}',
+    '.td-h{text-align:right;font-weight:600;width:20%;white-space:nowrap;}',
+    '.total-row td{font-weight:bold;background:#e2ecf5!important;border-top:2px solid '+ac+';}',
+    '.footer{font-size:6.5pt;color:#aaa;text-align:center;margin-top:20px;padding-top:6px;border-top:1px solid #eee;}',
+  ].join('');
+
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+    + '<title>Répartition de service — '+disc.label+'</title>'
+    + '<style>'+css+'</style></head><body>';
+
+  html += '<div class="disc-header">'
+    + '<h1>Répartition des services &mdash; '+disc.label+' <span class="badge">'+disc.code+'</span></h1>'
+    + '<div class="sub">'
+      + '<span>'+etab+'</span>'
+      + '<span>SEP &mdash; Section d\\'Enseignement Professionnel</span>'
+      + '<span>Année scolaire '+annee+'</span>'
+      + '<span>'+profData.length+' enseignant'+(profData.length>1?'s':'')+' &nbsp;&middot;&nbsp; '
+        +fh(profData.reduce(function(s,p){ return s+p.totalH; },0))+' h au total</span>'
+    + '</div></div>';
+
+  profData.forEach(function(p){
+    var stCls = p.hsa>0?'exc':(p.reste>0?'dft':'ok');
+    var stLbl = p.hsa>0?('HSA : +'+fh(p.hsa)+' h'):(p.reste>0?('Reste : '+fh(p.reste)+' h'):'Service complet ✓');
+    html += '<div class="prof-block">'
+      + '<div class="prof-header">'
+        + '<div>'
+          + '<div class="prof-name">'+p.nom+(p.prenom?' '+p.prenom:'')+'</div>'
+          + '<div class="prof-meta">'
+            + '<span>Quotité : <strong>'+fh(p.svc)+' h</strong></span>'
+            + '<span>Total validé : <strong>'+fh(p.totalH)+' h</strong></span>'
+            + (p.hsa>0?'<span style="color:#b52318;">HSA : <strong>+'+fh(p.hsa)+' h</strong></span>':'')
+            + (p.reste>0?'<span style="color:#1a6b3c;">Reste : <strong>'+fh(p.reste)+' h</strong></span>':'')
+          + '</div>'
+        + '</div>'
+        + '<div class="kpi '+stCls+'"><strong>'+stLbl+'</strong></div>'
+      + '</div>'
+      + '<table>'
+        + '<thead><tr>'
+          + '<th class="td-cls">Classe</th>'
+          + '<th class="td-mat">Matière</th>'
+          + '<th class="td-h">Heures</th>'
+        + '</tr></thead><tbody>';
+    p.rows.forEach(function(r){
+      html += '<tr>'
+        + '<td class="td-cls">'+r.classe+'</td>'
+        + '<td class="td-mat">'+r.matiere+'</td>'
+        + '<td class="td-h">'+fh(r.h)+' h</td>'
+        + '</tr>';
+    });
+    html += '</tbody><tfoot><tr class="total-row">'
+      + '<td colspan="2"><strong>TOTAL SERVICE</strong></td>'
+      + '<td class="td-h"><strong>'+fh(p.totalH)+' h</strong></td>'
+      + '</tr></tfoot></table></div>';
+  });
+
+  html += '<div class="footer">'
+    + etab+' &bull; SEP &bull; Répartition de service &bull; '+annee
+    + ' &bull; Document à usage interne &mdash; généré le '+new Date().toLocaleDateString('fr-FR')
+    + '</div></body></html>';
+
+  var win = window.open('about:blank','_blank');
+  if(!win){ showToast('Autorisez les pop-ups pour générer le PDF.','warning'); return; }
+  win.document.write(html);
+  win.document.close();
+  setTimeout(function(){ win.focus(); win.print(); }, 700);
 }
 
 /* ─── Export JSON pour une discipline ─── */
@@ -10651,9 +11166,20 @@ function importEquipeJSON(event){
 
       // Méthode 1 : import via rawAffect (clés exactes — sans risque de mismatch)
       if(data.rawAffect && Object.keys(data.rawAffect).length > 0){
-        state.repartitionAffect[discCode] = JSON.parse(JSON.stringify(data.rawAffect));
-        imported = Object.values(data.rawAffect)
-          .reduce((a,row) => a + Object.values(row).filter(v => parseFloat(v)>0).length, 0);
+        // Normaliser les clés : supprimer les backslashs parasites devant les apostrophes
+        // (bug historique : data-rep-key stockait la clé échappée, créant des doublons)
+        var normalizedAffect = {};
+        Object.keys(data.rawAffect).forEach(function(k){
+          var nk = k.replace(/\\'/g, "'");
+          if(!normalizedAffect[nk]) normalizedAffect[nk] = {};
+          Object.entries(data.rawAffect[k]).forEach(function(entry){
+            var pid = entry[0], v = entry[1];
+            if(parseFloat(v) > 0) normalizedAffect[nk][pid] = parseFloat(v);
+          });
+        });
+        state.repartitionAffect[discCode] = normalizedAffect;
+        imported = Object.values(normalizedAffect)
+          .reduce(function(a,row){ return a + Object.values(row).filter(function(v){ return parseFloat(v)>0; }).length; }, 0);
       }
       // Méthode 2 : import via lignes (compatibilité ancienne version)
       else if(data.lignes){
