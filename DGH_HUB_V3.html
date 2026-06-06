@@ -5410,6 +5410,9 @@ function repRefreshTotals(discCode){
 }
 
 function renderRepartition(){
+  // Mémoriser les positions de scroll horizontales avant reconstruction du DOM
+  const scrollSave=[...document.querySelectorAll('.repartition-disc-body')].map(b=>b.scrollLeft);
+
   // Populate filter select
   const filterSel=document.getElementById('rep-filter-disc');
   const filterVal=filterSel?filterSel.value:'';
@@ -5867,6 +5870,10 @@ function renderRepartition(){
   if(!container.children.length){
     container.innerHTML='<div class="alert alert-info"><i class="fa-solid fa-circle-info"></i> Aucune donnée à afficher. Vérifiez que des classes, des grilles horaires et des professeurs sont saisis.</div>';
   }
+
+  // Restaurer les positions de scroll horizontales après reconstruction du DOM
+  const newBodies=[...document.querySelectorAll('.repartition-disc-body')];
+  newBodies.forEach((b,i)=>{ if(scrollSave[i]>0) b.scrollLeft=scrollSave[i]; });
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -10317,6 +10324,10 @@ function renderRepartitionTable(){
   const container = document.getElementById('rep-content');
   if(!discCode || !container) return;
 
+  // Mémoriser le scroll horizontal avant reconstruction
+  const prevWrap = container.querySelector('.tbl-wrap');
+  const savedScroll = prevWrap ? prevWrap.scrollLeft : 0;
+
   const disc = getEffectiveDiscList().find(d => d.code === discCode);
   if(!disc){ container.innerHTML = ''; return; }
 
@@ -10521,6 +10532,12 @@ function renderRepartitionTable(){
 
   html += '</tbody></table></div></div></div>';
   container.innerHTML = html;
+
+  // Restaurer le scroll horizontal après reconstruction
+  if(savedScroll > 0){
+    const newWrap = container.querySelector('.tbl-wrap');
+    if(newWrap) newWrap.scrollLeft = savedScroll;
+  }
 }
 
 function repToggleNiveau(niveau, discCode){
