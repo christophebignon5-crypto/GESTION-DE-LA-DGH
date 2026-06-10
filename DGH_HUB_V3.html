@@ -398,6 +398,8 @@ function openHubParams() {
   document.getElementById('hp-ville').value    = p.ville;
   document.getElementById('hp-academie').value = p.academie;
   document.getElementById('hp-annee').value    = p.annee;
+  var tokEl = document.getElementById('hp-gh-token');
+  if(tokEl) tokEl.value = getGithubToken();
   document.getElementById('hub-params-modal').classList.add('open');
   setTimeout(function(){ document.getElementById('hp-etab').focus(); }, 100);
 }
@@ -472,6 +474,103 @@ function loadAllData(event) {
     } catch(err) { showHubToast('Fichier invalide : '+err.message); }
   };
   reader.readAsText(file); event.target.value = '';
+}
+
+// ════════════════════════════════════════════════════════
+// Sauvegarde Cloud (GitHub) — permet de récupérer les données
+// depuis n'importe quel appareil via le dépôt GitHub du Hub.
+// ════════════════════════════════════════════════════════
+var GH_TOKEN_KEY = 'dgh_github_token';
+var GH_OWNER  = 'christophebignon5-crypto';
+var GH_REPO   = 'GESTION-DE-LA-DGH';
+var GH_PATH   = 'data/dgh_save.json';
+var GH_BRANCH = 'main';
+
+function getGithubToken() {
+  try { return localStorage.getItem(GH_TOKEN_KEY) || ''; } catch(e) { return ''; }
+}
+function saveGithubToken() {
+  var el = document.getElementById('hp-gh-token');
+  if(!el) return;
+  var t = el.value.trim();
+  try {
+    if(t) { localStorage.setItem(GH_TOKEN_KEY, t); showHubToast('Token GitHub enregistré.'); }
+    else  { localStorage.removeItem(GH_TOKEN_KEY); showHubToast('Token GitHub effacé.'); }
+  } catch(e) {}
+}
+
+function utf8ToB64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64ToUtf8(str) {
+  return decodeURIComponent(escape(atob(str.replace(/\n/g,''))));
+}
+
+function buildBackupObject() {
+  var p = getHubParams();
+  var b = {version:'3.5', date:new Date().toISOString(), params:p, lgt_state:null, sep_state:null};
+  var lr = localStorage.getItem('dgh_lgt_state');
+  var sr = localStorage.getItem('dgh_sep_state');
+  if(lr) b.lgt_state = JSON.parse(lr);
+  if(sr) b.sep_state = JSON.parse(sr);
+  return b;
+}
+
+function applyBackupObject(b) {
+  if(!b.version) throw new Error('Format non reconnu.');
+  if(b.params)    localStorage.setItem(HUB_KEY,         JSON.stringify(b.params));
+  if(b.lgt_state) localStorage.setItem('dgh_lgt_state', JSON.stringify(b.lgt_state));
+  if(b.sep_state) localStorage.setItem('dgh_sep_state', JSON.stringify(b.sep_state));
+  ['lgt','sep'].forEach(function(id) {
+    var fr = document.getElementById(id+'-frame');
+    if(fr) { fr._loaded = false; fr.srcdoc = ''; }
+  });
+  applyHubParams();
+}
+
+function saveAllDataToGithub() {
+  var token = getGithubToken();
+  if(!token) { showHubToast('Renseignez d\'abord un token GitHub ci-dessus.'); return; }
+  var url = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
+  var headers = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json'};
+  var b = buildBackupObject();
+  var content = utf8ToB64(JSON.stringify(b, null, 2));
+  showHubToast('Envoi vers GitHub en cours…');
+  fetch(url+'?ref='+GH_BRANCH, {headers:headers})
+    .then(function(r){ return r.status===200 ? r.json() : null; })
+    .then(function(existing){
+      var body = {message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
+      if(existing && existing.sha) body.sha = existing.sha;
+      var putHeaders = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json'};
+      return fetch(url, {method:'PUT', headers:putHeaders, body:JSON.stringify(body)});
+    })
+    .then(function(r){
+      if(!r.ok) return r.json().then(function(e){ throw new Error(e.message || r.statusText); });
+      return r.json();
+    })
+    .then(function(){ showHubToast('Sauvegarde envoyée sur GitHub avec succès.'); })
+    .catch(function(err){ showHubToast('Erreur GitHub : '+err.message); });
+}
+
+function loadAllDataFromGithub() {
+  var token = getGithubToken();
+  if(!token) { showHubToast('Renseignez d\'abord un token GitHub ci-dessus.'); return; }
+  if(!confirm('Charger la sauvegarde GitHub va remplacer les données locales (LGT et SEP) sur cet appareil.\n\nContinuer ?')) return;
+  var url = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH+'?ref='+GH_BRANCH;
+  var headers = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json'};
+  showHubToast('Chargement depuis GitHub…');
+  fetch(url, {headers:headers})
+    .then(function(r){
+      if(!r.ok) throw new Error(r.status===404 ? 'Aucune sauvegarde trouvée sur GitHub.' : (r.status+' '+r.statusText));
+      return r.json();
+    })
+    .then(function(data){
+      var b = JSON.parse(b64ToUtf8(data.content));
+      applyBackupObject(b);
+      closeHubParams();
+      showHubToast('Sauvegarde GitHub chargée. Relancez l\'espace voulu.');
+    })
+    .catch(function(err){ showHubToast('Erreur GitHub : '+err.message); });
 }
 
 function showHubToast(msg) {
@@ -5410,8 +5509,8 @@ function repRefreshTotals(discCode){
 }
 
 function renderRepartition(){
-  // Mémoriser les positions de scroll horizontales avant reconstruction du DOM
-  const scrollSave=[...document.querySelectorAll('.repartition-disc-body')].map(b=>b.scrollLeft);
+  // Mémoriser les positions de scroll (horizontal + vertical) avant reconstruction du DOM
+  const scrollSave=[...document.querySelectorAll('.repartition-disc-body')].map(b=>({left:b.scrollLeft, top:b.scrollTop}));
 
   // Populate filter select
   const filterSel=document.getElementById('rep-filter-disc');
@@ -5871,9 +5970,13 @@ function renderRepartition(){
     container.innerHTML='<div class="alert alert-info"><i class="fa-solid fa-circle-info"></i> Aucune donnée à afficher. Vérifiez que des classes, des grilles horaires et des professeurs sont saisis.</div>';
   }
 
-  // Restaurer les positions de scroll horizontales après reconstruction du DOM
+  // Restaurer les positions de scroll (horizontal + vertical) après reconstruction du DOM
   const newBodies=[...document.querySelectorAll('.repartition-disc-body')];
-  newBodies.forEach((b,i)=>{ if(scrollSave[i]>0) b.scrollLeft=scrollSave[i]; });
+  newBodies.forEach((b,i)=>{
+    const s=scrollSave[i]; if(!s) return;
+    if(s.left>0) b.scrollLeft=s.left;
+    if(s.top>0)  b.scrollTop=s.top;
+  });
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -10324,9 +10427,10 @@ function renderRepartitionTable(){
   const container = document.getElementById('rep-content');
   if(!discCode || !container) return;
 
-  // Mémoriser le scroll horizontal avant reconstruction
+  // Mémoriser le scroll (horizontal + vertical) avant reconstruction
   const prevWrap = container.querySelector('.tbl-wrap');
-  const savedScroll = prevWrap ? prevWrap.scrollLeft : 0;
+  const savedScrollLeft = prevWrap ? prevWrap.scrollLeft : 0;
+  const savedScrollTop  = prevWrap ? prevWrap.scrollTop  : 0;
 
   const disc = getEffectiveDiscList().find(d => d.code === discCode);
   if(!disc){ container.innerHTML = ''; return; }
@@ -10533,10 +10637,13 @@ function renderRepartitionTable(){
   html += '</tbody></table></div></div></div>';
   container.innerHTML = html;
 
-  // Restaurer le scroll horizontal après reconstruction
-  if(savedScroll > 0){
+  // Restaurer le scroll (horizontal + vertical) après reconstruction
+  if(savedScrollLeft > 0 || savedScrollTop > 0){
     const newWrap = container.querySelector('.tbl-wrap');
-    if(newWrap) newWrap.scrollLeft = savedScroll;
+    if(newWrap){
+      if(savedScrollLeft > 0) newWrap.scrollLeft = savedScrollLeft;
+      if(savedScrollTop  > 0) newWrap.scrollTop  = savedScrollTop;
+    }
   }
 }
 
@@ -11514,6 +11621,27 @@ if(typeof INJECTED_STATE !== 'undefined' && INJECTED_STATE !== null){
         <input type="file" accept=".json" style="display:none" onchange="loadAllData(event)">
       </label>
     </div>
+    <div class="hub-psect"><i class="fa-solid fa-cloud"></i> Sauvegarde Cloud (GitHub)</div>
+    <div class="hub-pgrid">
+      <div class="hub-pfield full">
+        <label>Token d'accès GitHub (Personal Access Token)</label>
+        <input type="password" id="hp-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" onchange="saveGithubToken()">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:4px;">
+      <button class="hub-pbtn-action" onclick="saveAllDataToGithub()">
+        <i class="fa-solid fa-cloud-arrow-up" style="color:#4ade80;"></i>
+        <div><div class="hba-lbl">Sauvegarder sur GitHub</div><div class="hba-sub">Envoyer LGT + SEP vers le dépôt</div></div>
+      </button>
+      <button class="hub-pbtn-action" onclick="loadAllDataFromGithub()">
+        <i class="fa-solid fa-cloud-arrow-down" style="color:#60a5fa;"></i>
+        <div><div class="hba-lbl">Charger depuis GitHub</div><div class="hba-sub">Récupérer la dernière sauvegarde</div></div>
+      </button>
+    </div>
+    <p class="hub-pnote">
+      <i class="fa-solid fa-circle-info" style="margin-right:4px;"></i>
+      Le token est stocké uniquement sur cet appareil et sert à lire/écrire la sauvegarde dans le dépôt GitHub du Hub. À créer sur github.com → Settings → Developer settings → Personal access tokens (droits "Contents: Read and write" sur le dépôt GESTION-DE-LA-DGH).
+    </p>
     <div class="hub-pactions">
       <button class="hub-pbtn-cancel" onclick="closeHubParams()">Fermer</button>
       <button class="hub-pbtn-save" onclick="saveHubParams()">
