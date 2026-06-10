@@ -533,16 +533,25 @@ function saveAllDataToGithub() {
   if(!token) { showHubToast('Renseignez d\'abord un token GitHub ci-dessus.'); return; }
   var url = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
   var headers = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json'};
+  var putHeaders = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json'};
   var b = buildBackupObject();
   var content = utf8ToB64(JSON.stringify(b, null, 2));
   showHubToast('Envoi vers GitHub en cours…');
-  fetch(url+'?ref='+GH_BRANCH, {headers:headers})
-    .then(function(r){ return r.status===200 ? r.json() : null; })
-    .then(function(existing){
-      var body = {message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
-      if(existing && existing.sha) body.sha = existing.sha;
-      var putHeaders = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json'};
-      return fetch(url, {method:'PUT', headers:putHeaders, body:JSON.stringify(body)});
+  function getSha(){
+    return fetch(url+'?ref='+GH_BRANCH+'&t='+Date.now(), {headers:headers, cache:'no-store'})
+      .then(function(r){ return r.status===200 ? r.json() : null; })
+      .then(function(j){ return j && j.sha ? j.sha : null; });
+  }
+  function put(sha){
+    var body = {message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
+    if(sha) body.sha = sha;
+    return fetch(url, {method:'PUT', headers:putHeaders, body:JSON.stringify(body)});
+  }
+  getSha()
+    .then(function(sha){ return put(sha); })
+    .then(function(r){
+      if(r.status===409) return getSha().then(function(sha2){ return put(sha2); });
+      return r;
     })
     .then(function(r){
       if(!r.ok) return r.json().then(function(e){ throw new Error(e.message || r.statusText); });
@@ -4244,14 +4253,23 @@ function saveToGithubFromApp(){
   var content=btoa(unescape(encodeURIComponent(JSON.stringify(backup,null,2))));
   var url='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
   var headers={'Authorization':'token '+token,'Accept':'application/vnd.github+json'};
+  var putHeaders={'Authorization':'token '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
   showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Envoi vers GitHub en cours…','info');
-  fetch(url+'?ref='+GH_BRANCH,{headers:headers})
-    .then(function(r){ return r.status===200 ? r.json() : null; })
-    .then(function(existing){
-      var body={message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
-      if(existing && existing.sha) body.sha=existing.sha;
-      var putHeaders={'Authorization':'token '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
-      return fetch(url,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
+  function ghGetSha(){
+    return fetch(url+'?ref='+GH_BRANCH+'&t='+Date.now(),{headers:headers,cache:'no-store'})
+      .then(function(r){ return r.status===200 ? r.json() : null; })
+      .then(function(j){ return j && j.sha ? j.sha : null; });
+  }
+  function ghPut(sha){
+    var body={message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
+    if(sha) body.sha=sha;
+    return fetch(url,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
+  }
+  ghGetSha()
+    .then(function(sha){ return ghPut(sha); })
+    .then(function(r){
+      if(r.status===409) return ghGetSha().then(function(sha2){ return ghPut(sha2); });
+      return r;
     })
     .then(function(r){
       if(!r.ok) return r.json().then(function(e){ throw new Error(e.message||r.statusText); });
@@ -9360,14 +9378,23 @@ function saveToGithubFromApp(){
   var content=btoa(unescape(encodeURIComponent(JSON.stringify(backup,null,2))));
   var url='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
   var headers={'Authorization':'token '+token,'Accept':'application/vnd.github+json'};
+  var putHeaders={'Authorization':'token '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
   showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Envoi vers GitHub en cours…','info');
-  fetch(url+'?ref='+GH_BRANCH,{headers:headers})
-    .then(function(r){ return r.status===200 ? r.json() : null; })
-    .then(function(existing){
-      var body={message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
-      if(existing && existing.sha) body.sha=existing.sha;
-      var putHeaders={'Authorization':'token '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
-      return fetch(url,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
+  function ghGetSha(){
+    return fetch(url+'?ref='+GH_BRANCH+'&t='+Date.now(),{headers:headers,cache:'no-store'})
+      .then(function(r){ return r.status===200 ? r.json() : null; })
+      .then(function(j){ return j && j.sha ? j.sha : null; });
+  }
+  function ghPut(sha){
+    var body={message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
+    if(sha) body.sha=sha;
+    return fetch(url,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
+  }
+  ghGetSha()
+    .then(function(sha){ return ghPut(sha); })
+    .then(function(r){
+      if(r.status===409) return ghGetSha().then(function(sha2){ return ghPut(sha2); });
+      return r;
     })
     .then(function(r){
       if(!r.ok) return r.json().then(function(e){ throw new Error(e.message||r.statusText); });
