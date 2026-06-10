@@ -1821,6 +1821,7 @@ input.h-input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 2px 
       <label class="btn btn-sm" style="background:rgba(100,180,100,.85);color:#fff;border:none;cursor:pointer;" title="Importer les affectations d'une équipe disciplinaire"><i class="fa-solid fa-file-import"></i> Import équipe <input type="file" accept=".json" style="display:none" onchange="importEquipeFile(event)"></label>
       <button class="btn btn-sm" style="background:rgba(52,73,150,.9);color:#fff;border:none;font-weight:700;" onclick="generateEquipeFile()" title="Générer un fichier HTML autonome pour les équipes disciplinaires"><i class="fa-solid fa-share-nodes"></i> Générer fichier Équipe</button>
       <button class="btn btn-sm" style="background:#1a7a46;color:#fff;border:none;font-weight:700;" onclick="exportData()" title="Sauvegarder toutes les données (fichier JSON — clé USB, autre ordinateur)"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder tout</button>
+      <button class="btn btn-sm" style="background:#24292e;color:#fff;border:none;font-weight:700;" onclick="saveToGithubFromApp()" title="Envoyer la sauvegarde complète (LGT + SEP) vers GitHub, pour la récupérer sur un autre appareil"><i class="fa-brands fa-github"></i> Sauvegarde GitHub</button>
       <button class="btn btn-sm" style="background:rgba(192,57,43,.85);color:#fff;border:none;" onclick="resetAllData()" title="Réinitialiser toutes les données"><i class="fa-solid fa-rotate-left"></i> Réinitialiser</button>
     </span>
     <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="printPage()"><i class="fa-solid fa-print"></i></button>
@@ -4217,6 +4218,47 @@ function exportData(){
   URL.revokeObjectURL(a.href);
   // Update save indicator
   document.getElementById('last-save').textContent=\`Fichier sauvegardé le \${new Date().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}\`;
+}
+
+// Envoie une sauvegarde complète (params + LGT + SEP) vers le dépôt GitHub du Hub
+function saveToGithubFromApp(){
+  var GH_TOKEN_KEY='dgh_github_token';
+  var GH_OWNER='christophebignon5-crypto';
+  var GH_REPO='GESTION-DE-LA-DGH';
+  var GH_PATH='data/dgh_save.json';
+  var GH_BRANCH='main';
+  var token=localStorage.getItem(GH_TOKEN_KEY)||'';
+  if(!token){
+    token=prompt('Token d\\'accès GitHub (Personal Access Token) :\\n\\nCréez-le sur github.com → Settings → Developer settings → Personal access tokens (droit "repo" ou "Contents: Read and write").\\nIl sera mémorisé sur cet appareil.');
+    if(!token) return;
+    token=token.trim();
+    if(!token) return;
+    localStorage.setItem(GH_TOKEN_KEY, token);
+  }
+  saveState();
+  var hubParams={};
+  try{ var ph=localStorage.getItem('dgh_hub_params'); if(ph) hubParams=JSON.parse(ph); }catch(e){}
+  var backup={version:'3.5', date:new Date().toISOString(), params:hubParams, lgt_state:null, sep_state:null};
+  try{ var lr=localStorage.getItem('dgh_lgt_state'); if(lr) backup.lgt_state=JSON.parse(lr); }catch(e){}
+  try{ var sr=localStorage.getItem('dgh_sep_state'); if(sr) backup.sep_state=JSON.parse(sr); }catch(e){}
+  var content=btoa(unescape(encodeURIComponent(JSON.stringify(backup,null,2))));
+  var url='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
+  var headers={'Authorization':'token '+token,'Accept':'application/vnd.github+json'};
+  showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Envoi vers GitHub en cours…','info');
+  fetch(url+'?ref='+GH_BRANCH,{headers:headers})
+    .then(function(r){ return r.status===200 ? r.json() : null; })
+    .then(function(existing){
+      var body={message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
+      if(existing && existing.sha) body.sha=existing.sha;
+      var putHeaders={'Authorization':'token '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
+      return fetch(url,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
+    })
+    .then(function(r){
+      if(!r.ok) return r.json().then(function(e){ throw new Error(e.message||r.statusText); });
+      return r.json();
+    })
+    .then(function(){ showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarde envoyée sur GitHub avec succès.','success'); })
+    .catch(function(err){ showToast('<i class="fa-solid fa-triangle-exclamation"></i>&nbsp; Erreur GitHub : '+err.message,'warning'); });
 }
 
 function loadFromFile(event){
@@ -6988,6 +7030,7 @@ body.print-landscape-ventilation { }
       <button class="btn btn-sm" style="background:rgba(41,128,185,.85);color:#fff;border:none;" onclick="generatePPTX()" title="Présentation PPTX"><i class="fa-solid fa-file-powerpoint"></i> Présentation</button>
       <label class="btn btn-sm" style="background:rgba(201,144,42,.85);color:#fff;border:none;cursor:pointer;" title="Charger une sauvegarde JSON"><i class="fa-solid fa-folder-open"></i> Charger <input type="file" accept=".json" style="display:none" onchange="loadFromFile(event)"></label>
       <button class="btn btn-sm" style="background:#1a7a46;color:#fff;border:none;font-weight:700;" onclick="exportData()" title="Sauvegarder toutes les données (fichier JSON — clé USB, autre ordinateur)"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder tout</button>
+      <button class="btn btn-sm" style="background:#24292e;color:#fff;border:none;font-weight:700;" onclick="saveToGithubFromApp()" title="Envoyer la sauvegarde complète (LGT + SEP) vers GitHub, pour la récupérer sur un autre appareil"><i class="fa-brands fa-github"></i> Sauvegarde GitHub</button>
       <button class="btn btn-sm" style="background:rgba(192,57,43,.85);color:#fff;border:none;" onclick="resetAllData()" title="Réinitialiser toutes les données"><i class="fa-solid fa-rotate-left"></i> Réinitialiser</button>
       <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="printPage()"><i class="fa-solid fa-print"></i></button>
     </div>
@@ -9291,6 +9334,47 @@ function exportData(){
   URL.revokeObjectURL(a.href);
   // Update save indicator
   document.getElementById('last-save').textContent=\`Fichier sauvegardé le \${new Date().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}\`;
+}
+
+// Envoie une sauvegarde complète (params + LGT + SEP) vers le dépôt GitHub du Hub
+function saveToGithubFromApp(){
+  var GH_TOKEN_KEY='dgh_github_token';
+  var GH_OWNER='christophebignon5-crypto';
+  var GH_REPO='GESTION-DE-LA-DGH';
+  var GH_PATH='data/dgh_save.json';
+  var GH_BRANCH='main';
+  var token=localStorage.getItem(GH_TOKEN_KEY)||'';
+  if(!token){
+    token=prompt('Token d\\'accès GitHub (Personal Access Token) :\\n\\nCréez-le sur github.com → Settings → Developer settings → Personal access tokens (droit "repo" ou "Contents: Read and write").\\nIl sera mémorisé sur cet appareil.');
+    if(!token) return;
+    token=token.trim();
+    if(!token) return;
+    localStorage.setItem(GH_TOKEN_KEY, token);
+  }
+  saveState();
+  var hubParams={};
+  try{ var ph=localStorage.getItem('dgh_hub_params'); if(ph) hubParams=JSON.parse(ph); }catch(e){}
+  var backup={version:'3.5', date:new Date().toISOString(), params:hubParams, lgt_state:null, sep_state:null};
+  try{ var lr=localStorage.getItem('dgh_lgt_state'); if(lr) backup.lgt_state=JSON.parse(lr); }catch(e){}
+  try{ var sr=localStorage.getItem('dgh_sep_state'); if(sr) backup.sep_state=JSON.parse(sr); }catch(e){}
+  var content=btoa(unescape(encodeURIComponent(JSON.stringify(backup,null,2))));
+  var url='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
+  var headers={'Authorization':'token '+token,'Accept':'application/vnd.github+json'};
+  showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Envoi vers GitHub en cours…','info');
+  fetch(url+'?ref='+GH_BRANCH,{headers:headers})
+    .then(function(r){ return r.status===200 ? r.json() : null; })
+    .then(function(existing){
+      var body={message:'Sauvegarde DGH Hub - '+new Date().toISOString(), content:content, branch:GH_BRANCH};
+      if(existing && existing.sha) body.sha=existing.sha;
+      var putHeaders={'Authorization':'token '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
+      return fetch(url,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
+    })
+    .then(function(r){
+      if(!r.ok) return r.json().then(function(e){ throw new Error(e.message||r.statusText); });
+      return r.json();
+    })
+    .then(function(){ showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarde envoyée sur GitHub avec succès.','success'); })
+    .catch(function(err){ showToast('<i class="fa-solid fa-triangle-exclamation"></i>&nbsp; Erreur GitHub : '+err.message,'warning'); });
 }
 
 function loadFromFile(event){
