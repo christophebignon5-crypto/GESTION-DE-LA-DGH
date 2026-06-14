@@ -1,11 +1,12 @@
 {
   "version": "3.5",
-  "date": "2026-06-10T01:16:28.341Z",
+  "date": "2026-06-14T17:30:19.743Z",
   "params": {
+    "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
-    "ville": "Mana",
     "academie": "Guyane",
-    "annee": "2026-2027"
+    "ville": "Mana",
+    "uai": "9730421V"
   },
   "lgt_state": {
     "dgh": {
@@ -639,23 +640,6 @@
         "niveauBTS": false,
         "ors": 18,
         "id": 241
-      },
-      {
-        "nom": "SES",
-        "prenom": "OSCAR",
-        "discipline": "AUTRE_SES",
-        "discAutre": "",
-        "mat": "AUTRE_SES",
-        "quotite": 18,
-        "csd": 0,
-        "decharge": 0,
-        "dechargeType": "",
-        "bmp": true,
-        "bmpQuotite": 10,
-        "niveauTerminal": false,
-        "niveauBTS": false,
-        "ors": 18,
-        "id": 242
       }
     ],
     "ventilation": {
@@ -1026,12 +1010,12 @@
           "h4": 0
         },
         {
-          "hcl": 2,
-          "hgr": 0,
-          "nbCl": 1,
-          "nbGr": 0,
+          "hcl": 0,
+          "hgr": 2,
+          "nbCl": 0,
+          "nbGr": 2,
           "disc1": "L0426",
-          "h1": 2,
+          "h1": 4,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -1182,12 +1166,12 @@
           "h4": 0
         },
         {
-          "hcl": 0,
-          "hgr": 2,
-          "nbCl": 0,
+          "hcl": 1,
+          "hgr": 1,
+          "nbCl": 1,
           "nbGr": 2,
           "disc1": "L0426",
-          "h1": 4,
+          "h1": 3,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -4302,7 +4286,7 @@
       "pin": "0917"
     },
     "nextClassId": 101,
-    "nextProfId": 243,
+    "nextProfId": 242,
     "repAffectations": {
       "L1800": {
         "2GT1||Arts Plastiques||3": {
@@ -4373,17 +4357,16 @@
           "239": 2
         },
         "2GT2||SES||2": {
-          "242": 2
+          "239": 2
         },
         "2GT3||SES||2": {
-          "242": 2
+          "239": 2
         },
         "2GT4||SES||2": {
-          "242": 2
+          "239": 2
         },
         "1G1||SES||8": {
-          "239": 4,
-          "242": 4
+          "239": 8
         },
         "TG1||SES||6": {
           "239": 6
@@ -5616,13 +5599,12 @@
         "prenom": "CATHERINE",
         "discipline": "P8013",
         "mat": "P8013",
-        "quotite": 15,
+        "quotite": 18,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": ""
+        "bmpQuotite": 0
       },
       {
         "id": 267,
@@ -5656,7 +5638,7 @@
         "prenom": "WANG",
         "discipline": "P8013",
         "mat": "P8013",
-        "quotite": 18,
+        "quotite": 16,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
@@ -5704,6 +5686,20 @@
         "bmp": false,
         "bmpQuotite": 0,
         "id": 273
+      },
+      {
+        "nom": "WITTENS",
+        "prenom": "YORIS",
+        "discipline": "L1900",
+        "discAutre": "",
+        "mat": "L1900",
+        "quotite": 18,
+        "csd": 0,
+        "decharge": 0,
+        "dechargeType": "",
+        "bmp": false,
+        "bmpQuotite": 0,
+        "id": 274
       }
     ],
     "ventilation": {
@@ -14718,8 +14714,7 @@
           "227": 1
         },
         "2BP||2BP ALIM||ANG": {
-          "212": 2,
-          "259": 2
+          "212": 4
         },
         "2BP||2BP MCC||ANG": {
           "207": 2
@@ -14735,9 +14730,6 @@
         },
         "1BP||1BP BOU||ANG": {
           "259": 2
-        },
-        "1BP||1BP MCC||ANG": {
-          "207": 2
         },
         "1BP||1BP MET||ANG": {
           "212": 2
@@ -14772,61 +14764,47 @@
         "CS||CS Organisateurs de Réception||Comm.": {
           "207": 3
         },
-        "CS||CS Organisateurs de Réception||ANG": {
-          "212": 3
-        },
         "1BP||1BP Métiers de l\\'Accueil||ANG": {
           "227": 4
         },
         "TBP||TBP Métiers de l\\'Accueil||ANG": {
           "207": 5
+        },
+        "1BP||1BP MCC||ANG": {
+          "212": 2
+        },
+        "CS||CS Organisateurs de Réception||ANG": {
+          "207": 3
         }
       },
       "P8013": {
         "1BP||1BP Métiers Commerce et Vente||Eco-Droit": {
-          "215": 0,
-          "219": 0,
           "246": 1
         },
-        "1CAP2||1CAP2 AFAT||Co-FR-ETP": {
-          "203": 0,
-          "254": 0
-        },
-        "1CAP2||1CAP2 AFAT||Chef Œuvre Pro": {
-          "270": 0
-        },
-        "1CAP2||1CAP2 EPC1||ETP": {
-          "215": 0
-        },
+        "1CAP2||1CAP2 AFAT||Co-FR-ETP": {},
+        "1CAP2||1CAP2 AFAT||Chef Œuvre Pro": {},
+        "1CAP2||1CAP2 EPC1||ETP": {},
         "TCAP2||TCAP2 EPC1||ETP": {
           "203": 6,
-          "211": 0,
-          "219": 6,
-          "222": 0
+          "219": 6
         },
         "1BP||1BP Métiers de l'Accueil||Eco-Droit": {
-          "215": 0,
           "271": 1
         },
         "TBP||TBP Métiers de l'Accueil||Eco-Droit": {
-          "215": 0,
           "243": 1.5
         },
         "TBP||TBP Métiers Commerce et Vente||Eco-Droit": {
-          "211": 1.5,
-          "215": 0
+          "211": 1.5
         },
         "TCAP2||TCAP2 EPC1||Chef Œuvre Pro": {
-          "219": 1.5,
-          "222": 0
+          "219": 1.5
         },
         "TBP||TBP Métiers de l'Accueil||Projet": {
-          "211": 0,
           "228": 2
         },
         "1CAP2||1CAP2 TOUR||ETP": {
           "215": 4,
-          "219": 0,
           "254": 4.5
         },
         "1BP||1BP Métiers de l\\'Accueil||ETP": {
@@ -15188,7 +15166,8 @@
           "229": 1.5
         }
       },
-      "P6500": {}
+      "P6500": {},
+      "L1900": {}
     },
     "params": {
       "annee": "2026-2027",
@@ -15199,7 +15178,7 @@
       "pptxTitre": "Répartition de la Dotation Horaire Globale"
     },
     "nextClassId": 112,
-    "nextProfId": 274,
+    "nextProfId": 275,
     "_seedTS": 0
   }
 }
