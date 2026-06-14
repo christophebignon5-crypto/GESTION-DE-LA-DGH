@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-14T18:29:22.627Z",
+  "date": "2026-06-14T18:33:07.910Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -5745,6 +5745,20 @@
         "bmp": false,
         "bmpQuotite": 0,
         "id": 273
+      },
+      {
+        "nom": "WITTENS",
+        "prenom": "YORIS",
+        "discipline": "L1900",
+        "discAutre": "",
+        "mat": "L1900",
+        "quotite": 18,
+        "csd": 0,
+        "decharge": 0,
+        "dechargeType": "",
+        "bmp": false,
+        "bmpQuotite": 0,
+        "id": 274
       }
     ],
     "ventilation": {
@@ -15229,7 +15243,8 @@
           "229": 1.5
         }
       },
-      "P6500": {}
+      "P6500": {},
+      "L1900": {}
     },
     "params": {
       "annee": "2026-2027",
@@ -15240,7 +15255,7 @@
       "pptxTitre": "Répartition de la Dotation Horaire Globale"
     },
     "nextClassId": 112,
-    "nextProfId": 274,
+    "nextProfId": 275,
     "_seedTS": 0
   }
 }
