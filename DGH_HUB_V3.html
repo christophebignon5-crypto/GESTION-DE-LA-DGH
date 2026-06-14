@@ -521,11 +521,55 @@ function applyBackupObject(b) {
   if(b.params)    localStorage.setItem(HUB_KEY,         JSON.stringify(b.params));
   if(b.lgt_state) localStorage.setItem('dgh_lgt_state', JSON.stringify(b.lgt_state));
   if(b.sep_state) localStorage.setItem('dgh_sep_state', JSON.stringify(b.sep_state));
+  if(b.date){
+    setGithubSyncMeta(b.date);
+    try{ localStorage.setItem(GH_LOCAL_MODIFIED_KEY, b.date); }catch(e){}
+  }
   ['lgt','sep'].forEach(function(id) {
     var fr = document.getElementById(id+'-frame');
     if(fr) { fr._loaded = false; fr.srcdoc = ''; }
   });
   applyHubParams();
+}
+
+// ── Synchronisation automatique GitHub ──────────────────
+var GH_SYNC_META_KEY     = 'dgh_github_sync_meta';
+var GH_LOCAL_MODIFIED_KEY = 'dgh_local_modified';
+
+function getGithubSyncMeta() {
+  try { var s = localStorage.getItem(GH_SYNC_META_KEY); return s ? JSON.parse(s) : {}; }
+  catch(e) { return {}; }
+}
+function setGithubSyncMeta(date) {
+  try { localStorage.setItem(GH_SYNC_META_KEY, JSON.stringify({date:date})); } catch(e) {}
+}
+
+// Au démarrage : si une sauvegarde GitHub plus récente que nos données
+// locales existe (et plus récente que notre dernière synchro), on la
+// charge automatiquement avant de lancer les espaces LGT/SEP.
+function autoSyncOnStartup(done) {
+  var token = getGithubToken();
+  if(!token) { done(); return; }
+  var url = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH+'?ref='+GH_BRANCH+'&t='+Date.now();
+  var headers = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json'};
+  var finished = false;
+  function finish(){ if(finished) return; finished = true; done(); }
+  setTimeout(finish, 6000); // ne jamais bloquer le démarrage plus de 6s
+  fetch(url, {headers:headers, cache:'no-store'})
+    .then(function(r){ return r.status===200 ? r.json() : null; })
+    .then(function(data){
+      if(!data || !data.content) { finish(); return; }
+      var b = JSON.parse(b64ToUtf8(data.content));
+      var remoteDate = b.date || '';
+      var lastSync = getGithubSyncMeta().date || '';
+      var localModified = localStorage.getItem(GH_LOCAL_MODIFIED_KEY) || '';
+      if(remoteDate && remoteDate > lastSync && remoteDate > localModified) {
+        applyBackupObject(b);
+        showHubToast('Données synchronisées depuis GitHub.');
+      }
+      finish();
+    })
+    .catch(function(){ finish(); });
 }
 
 function saveAllDataToGithub() {
@@ -557,7 +601,11 @@ function saveAllDataToGithub() {
       if(!r.ok) return r.json().then(function(e){ throw new Error(e.message || r.statusText); });
       return r.json();
     })
-    .then(function(){ showHubToast('Sauvegarde envoyée sur GitHub avec succès.'); })
+    .then(function(){
+      setGithubSyncMeta(b.date);
+      try{ localStorage.setItem(GH_LOCAL_MODIFIED_KEY, b.date); }catch(e){}
+      showHubToast('Sauvegarde envoyée sur GitHub avec succès.');
+    })
     .catch(function(err){ showHubToast('Erreur GitHub : '+err.message); });
 }
 
@@ -887,11 +935,17 @@ window.hubGeneratePDF = function(discFilter) {
 
 window.addEventListener('DOMContentLoaded', function() {
   applyHubParams();
-  var lf = document.getElementById('lgt-frame');
-  var sf = document.getElementById('sep-frame');
-  if(typeof LGT_SRC!=='undefined'&&lf) lf.srcdoc = LGT_SRC;
-  if(typeof SEP_SRC!=='undefined'&&sf) sf.srcdoc = SEP_SRC;
-  setTimeout(function(){ document.getElementById('hub-loader').classList.add('hidden'); }, 300);
+  var loader = document.getElementById('hub-loader');
+  var loaderText = loader ? loader.querySelector('.loader-text') : null;
+  if(loaderText) loaderText.textContent = 'Synchronisation…';
+  autoSyncOnStartup(function(){
+    applyHubParams();
+    var lf = document.getElementById('lgt-frame');
+    var sf = document.getElementById('sep-frame');
+    if(typeof LGT_SRC!=='undefined'&&lf) lf.srcdoc = LGT_SRC;
+    if(typeof SEP_SRC!=='undefined'&&sf) sf.srcdoc = SEP_SRC;
+    setTimeout(function(){ if(loader) loader.classList.add('hidden'); }, 300);
+  });
 });
 </script>
 
@@ -2634,8 +2688,20 @@ function initVentilation(){
 
 function saveState(){
   localStorage.setItem('dgh_lgt_state',JSON.stringify(state));
+  try{ localStorage.setItem('dgh_local_modified', new Date().toISOString()); }catch(e){}
+  scheduleGithubAutoSync();
   const now=new Date();
   document.getElementById('last-save').textContent=\`Sauvegardé \${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}\`;
+}
+
+// Planifie un envoi automatique vers GitHub (débounce) après une saisie
+var _ghAutoSyncTimer=null;
+var _ghSilentSyncRunning=false;
+function scheduleGithubAutoSync(){
+  if(_ghSilentSyncRunning) return;
+  try{ if(!localStorage.getItem('dgh_github_token')) return; }catch(e){ return; }
+  clearTimeout(_ghAutoSyncTimer);
+  _ghAutoSyncTimer=setTimeout(function(){ saveToGithubFromApp(true); }, 20000);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -4230,7 +4296,7 @@ function exportData(){
 }
 
 // Envoie une sauvegarde complète (params + LGT + SEP) vers le dépôt GitHub du Hub
-function saveToGithubFromApp(){
+function saveToGithubFromApp(silent){
   var GH_TOKEN_KEY='dgh_github_token';
   var GH_OWNER='christophebignon5-crypto';
   var GH_REPO='GESTION-DE-LA-DGH';
@@ -4238,13 +4304,16 @@ function saveToGithubFromApp(){
   var GH_BRANCH='main';
   var token=localStorage.getItem(GH_TOKEN_KEY)||'';
   if(!token){
+    if(silent) return;
     token=prompt('Token d\\'accès GitHub (Personal Access Token) :\\n\\nCréez-le sur github.com → Settings → Developer settings → Personal access tokens (droit "repo" ou "Contents: Read and write").\\nIl sera mémorisé sur cet appareil.');
     if(!token) return;
     token=token.trim();
     if(!token) return;
     localStorage.setItem(GH_TOKEN_KEY, token);
   }
+  _ghSilentSyncRunning=true;
   saveState();
+  _ghSilentSyncRunning=false;
   var hubParams={};
   try{ var ph=localStorage.getItem('dgh_hub_params'); if(ph) hubParams=JSON.parse(ph); }catch(e){}
   var backup={version:'3.5', date:new Date().toISOString(), params:hubParams, lgt_state:null, sep_state:null};
@@ -4254,7 +4323,7 @@ function saveToGithubFromApp(){
   var url='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
   var headers={'Authorization':'token '+token,'Accept':'application/vnd.github+json'};
   var putHeaders={'Authorization':'token '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
-  showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Envoi vers GitHub en cours…','info');
+  if(!silent) showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Envoi vers GitHub en cours…','info');
   function ghGetSha(){
     return fetch(url+'?ref='+GH_BRANCH+'&t='+Date.now(),{headers:headers,cache:'no-store'})
       .then(function(r){ return r.status===200 ? r.json() : null; })
@@ -4275,7 +4344,15 @@ function saveToGithubFromApp(){
       if(!r.ok) return r.json().then(function(e){ throw new Error(e.message||r.statusText); });
       return r.json();
     })
-    .then(function(){ showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarde envoyée sur GitHub avec succès.','success'); })
+    .then(function(){
+      try{
+        localStorage.setItem('dgh_github_sync_meta', JSON.stringify({date:backup.date}));
+        localStorage.setItem('dgh_local_modified', backup.date);
+      }catch(e){}
+      showToast(silent
+        ? '<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Synchronisé avec GitHub.'
+        : '<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarde envoyée sur GitHub avec succès.', 'success');
+    })
     .catch(function(err){ showToast('<i class="fa-solid fa-triangle-exclamation"></i>&nbsp; Erreur GitHub : '+err.message,'warning'); });
 }
 
@@ -8026,8 +8103,20 @@ function initVentilation(){
 
 function saveState(){
   localStorage.setItem('dgh_sep_state',JSON.stringify(state));
+  try{ localStorage.setItem('dgh_local_modified', new Date().toISOString()); }catch(e){}
+  scheduleGithubAutoSync();
   const now=new Date();
   document.getElementById('last-save').textContent=\`Sauvegardé \${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}\`;
+}
+
+// Planifie un envoi automatique vers GitHub (débounce) après une saisie
+var _ghAutoSyncTimer=null;
+var _ghSilentSyncRunning=false;
+function scheduleGithubAutoSync(){
+  if(_ghSilentSyncRunning) return;
+  try{ if(!localStorage.getItem('dgh_github_token')) return; }catch(e){ return; }
+  clearTimeout(_ghAutoSyncTimer);
+  _ghAutoSyncTimer=setTimeout(function(){ saveToGithubFromApp(true); }, 20000);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -9355,7 +9444,7 @@ function exportData(){
 }
 
 // Envoie une sauvegarde complète (params + LGT + SEP) vers le dépôt GitHub du Hub
-function saveToGithubFromApp(){
+function saveToGithubFromApp(silent){
   var GH_TOKEN_KEY='dgh_github_token';
   var GH_OWNER='christophebignon5-crypto';
   var GH_REPO='GESTION-DE-LA-DGH';
@@ -9363,13 +9452,16 @@ function saveToGithubFromApp(){
   var GH_BRANCH='main';
   var token=localStorage.getItem(GH_TOKEN_KEY)||'';
   if(!token){
+    if(silent) return;
     token=prompt('Token d\\'accès GitHub (Personal Access Token) :\\n\\nCréez-le sur github.com → Settings → Developer settings → Personal access tokens (droit "repo" ou "Contents: Read and write").\\nIl sera mémorisé sur cet appareil.');
     if(!token) return;
     token=token.trim();
     if(!token) return;
     localStorage.setItem(GH_TOKEN_KEY, token);
   }
+  _ghSilentSyncRunning=true;
   saveState();
+  _ghSilentSyncRunning=false;
   var hubParams={};
   try{ var ph=localStorage.getItem('dgh_hub_params'); if(ph) hubParams=JSON.parse(ph); }catch(e){}
   var backup={version:'3.5', date:new Date().toISOString(), params:hubParams, lgt_state:null, sep_state:null};
@@ -9379,7 +9471,7 @@ function saveToGithubFromApp(){
   var url='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
   var headers={'Authorization':'token '+token,'Accept':'application/vnd.github+json'};
   var putHeaders={'Authorization':'token '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
-  showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Envoi vers GitHub en cours…','info');
+  if(!silent) showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Envoi vers GitHub en cours…','info');
   function ghGetSha(){
     return fetch(url+'?ref='+GH_BRANCH+'&t='+Date.now(),{headers:headers,cache:'no-store'})
       .then(function(r){ return r.status===200 ? r.json() : null; })
@@ -9400,7 +9492,15 @@ function saveToGithubFromApp(){
       if(!r.ok) return r.json().then(function(e){ throw new Error(e.message||r.statusText); });
       return r.json();
     })
-    .then(function(){ showToast('<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarde envoyée sur GitHub avec succès.','success'); })
+    .then(function(){
+      try{
+        localStorage.setItem('dgh_github_sync_meta', JSON.stringify({date:backup.date}));
+        localStorage.setItem('dgh_local_modified', backup.date);
+      }catch(e){}
+      showToast(silent
+        ? '<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Synchronisé avec GitHub.'
+        : '<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp; Sauvegarde envoyée sur GitHub avec succès.', 'success');
+    })
     .catch(function(err){ showToast('<i class="fa-solid fa-triangle-exclamation"></i>&nbsp; Erreur GitHub : '+err.message,'warning'); });
 }
 
