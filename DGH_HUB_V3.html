@@ -550,6 +550,20 @@ function setGithubSyncMeta(date) {
 function autoSyncOnStartup(done) {
   var token = getGithubToken();
   if(!token) { done(); return; }
+
+  // Première exécution de la synchro auto sur cet appareil : si des
+  // données locales existent déjà mais qu'aucune référence de synchro
+  // n'a encore été établie, on considère ces données locales comme la
+  // référence (on ne les écrase JAMAIS automatiquement sans repère fiable).
+  var hasLocalData = !!(localStorage.getItem('dgh_lgt_state') || localStorage.getItem('dgh_sep_state'));
+  var lastSync0 = getGithubSyncMeta().date || '';
+  var localModified0 = localStorage.getItem(GH_LOCAL_MODIFIED_KEY) || '';
+  if(hasLocalData && !lastSync0 && !localModified0) {
+    try{ localStorage.setItem(GH_LOCAL_MODIFIED_KEY, new Date().toISOString()); }catch(e){}
+    done();
+    return;
+  }
+
   var url = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH+'?ref='+GH_BRANCH+'&t='+Date.now();
   var headers = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json'};
   var finished = false;
