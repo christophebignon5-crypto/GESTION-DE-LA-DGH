@@ -1,12 +1,11 @@
 {
   "version": "3.5",
-  "date": "2026-06-14T17:30:19.743Z",
+  "date": "2026-06-14T17:30:30.678Z",
   "params": {
-    "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
-    "academie": "Guyane",
     "ville": "Mana",
-    "uai": "9730421V"
+    "academie": "Guyane",
+    "annee": "2026-2027"
   },
   "lgt_state": {
     "dgh": {
