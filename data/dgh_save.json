@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-15T21:15:19.971Z",
+  "date": "2026-06-15T21:16:47.071Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -15375,6 +15375,12 @@
         "1CAP2||1CAP2 BOU||ETP": {
           "221": 6,
           "249": 5.5
+        },
+        "1CAP2||1CAP2 BOU||SST": {
+          "249": 0.5
+        },
+        "1CAP2||1CAP2 POI||SST": {
+          "249": 0.5
         }
       }
     },
