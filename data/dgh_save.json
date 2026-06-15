@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-15T20:33:08.895Z",
+  "date": "2026-06-15T20:39:00.073Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -15274,6 +15274,9 @@
         },
         "Autre||3EME PREPA METIER||3PM": {
           "200": 2
+        },
+        "2BP||2BP ALIM||Sciences": {
+          "247": 3
         }
       }
     },
