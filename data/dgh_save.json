@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-15T21:00:48.178Z",
+  "date": "2026-06-15T21:01:27.910Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -13354,7 +13354,7 @@
           "_mat": "DECOUVERTE METIERS",
           "_code": "3PM",
           "_cat": "Autre",
-          "hcl": 5,
+          "hcl": 4,
           "hgr": 0,
           "nbCl": 1,
           "nbGr": 0,
@@ -13365,8 +13365,8 @@
           "disc3": "P8013",
           "h3": 1,
           "disc4": "P8510",
-          "h4": 2,
-          "_hRef": 5
+          "h4": 1,
+          "_hRef": 4
         }
       ],
       "UNSS": [
