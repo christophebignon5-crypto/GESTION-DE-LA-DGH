@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-15T21:32:54.186Z",
+  "date": "2026-06-15T21:34:14.144Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -14792,9 +14792,11 @@
         },
         "1CAP2||1CAP2 AFAT||Co-FR-ETP": {
           "203": 0,
+          "219": 1.5,
           "254": 0
         },
         "1CAP2||1CAP2 AFAT||Chef Œuvre Pro": {
+          "219": 1.5,
           "270": 0
         },
         "1CAP2||1CAP2 EPC1||ETP": {
@@ -15018,13 +15020,17 @@
           "228": 1.5
         },
         "1CAP2||1CAP2 AFAT||ETP": {
-          "219": 4.5
+          "219": 2.5,
+          "222": 2
         },
         "Autre||3EME PREPA METIER||3PM": {
           "246": 1
         },
         "1CAP2||1CAP2 POI||ECO": {
           "235": 0.5
+        },
+        "1CAP2||1CAP2 AFAT||Co-MATHS-ETP": {
+          "222": 1.5
         }
       },
       "P2200": {
