@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-15T20:56:50.660Z",
+  "date": "2026-06-15T20:59:08.702Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -12984,7 +12984,8 @@
           "disc3": "—",
           "h3": 0,
           "disc4": "—",
-          "h4": 0
+          "h4": 0,
+          "_matOverride": "Sciences Appliquées"
         },
         {
           "hcl": 0,
