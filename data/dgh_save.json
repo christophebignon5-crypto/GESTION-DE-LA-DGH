@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-15T22:05:24.668Z",
+  "date": "2026-06-15T22:05:58.550Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -15033,6 +15033,9 @@
         },
         "CS||CS Essayage Vente et retouche||Eco-Gest": {
           "219": 2
+        },
+        "Autre||3EME PREPA METIER||3PM": {
+          "219": 1
         }
       },
       "P2200": {
