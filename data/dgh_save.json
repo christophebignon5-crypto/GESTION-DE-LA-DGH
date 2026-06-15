@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-14T18:33:17.648Z",
+  "date": "2026-06-15T18:17:21.258Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4422,7 +4422,7 @@
           "212": 6
         },
         "TG2||Ens. Scientifique SVT||2": {
-          "217": 2
+          "212": 2
         },
         "2GT4||S.V.T.||3": {
           "212": 3
@@ -4493,47 +4493,6 @@
         },
         "1BTS GTLA||Culture économique, juridique et managériale appliquée au transport et aux prestations logistiques||2": {
           "228": 2
-        }
-      },
-      "L0426": {
-        "2GT1||Espagnol 2||3": {
-          "204": 3
-        },
-        "2GT2||Espagnol 2||3": {
-          "204": 3
-        },
-        "1G1||Espagnol B||2": {
-          "204": 2
-        },
-        "TG1||Espagnol B||2": {
-          "204": 2
-        },
-        "TSTMG||Espagnol 2||4": {
-          "204": 4
-        },
-        "1BTS CI||Espagnol||4": {
-          "204": 4
-        },
-        "2GT3||Espagnol 2||3": {
-          "210": 3
-        },
-        "2GT4||Espagnol 2||3": {
-          "210": 3
-        },
-        "1G1||LLCE Espagnol||4": {
-          "210": 4
-        },
-        "1G2||Espagnol B||2": {
-          "210": 2
-        },
-        "1STMG||Espagnol 2||2": {
-          "210": 2
-        },
-        "TG2||Espagnol B||2": {
-          "210": 2
-        },
-        "2BTS CI||Espagnol||3": {
-          "210": 3
         }
       }
     },
@@ -5745,20 +5704,6 @@
         "bmp": false,
         "bmpQuotite": 0,
         "id": 273
-      },
-      {
-        "nom": "WITTENS",
-        "prenom": "YORIS",
-        "discipline": "L1900",
-        "discAutre": "",
-        "mat": "L1900",
-        "quotite": 18,
-        "csd": 0,
-        "decharge": 0,
-        "dechargeType": "",
-        "bmp": false,
-        "bmpQuotite": 0,
-        "id": 274
       }
     ],
     "ventilation": {
@@ -15243,8 +15188,7 @@
           "229": 1.5
         }
       },
-      "P6500": {},
-      "L1900": {}
+      "P6500": {}
     },
     "params": {
       "annee": "2026-2027",
@@ -15255,7 +15199,7 @@
       "pptxTitre": "Répartition de la Dotation Horaire Globale"
     },
     "nextClassId": 112,
-    "nextProfId": 275,
+    "nextProfId": 274,
     "_seedTS": 0
   }
 }
