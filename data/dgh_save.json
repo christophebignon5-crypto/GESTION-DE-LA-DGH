@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-16T17:40:01.376Z",
+  "date": "2026-06-16T17:40:53.612Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4534,6 +4534,36 @@
         },
         "1G2||Ens. Moral et Civique||1": {
           "227": 1
+        },
+        "1STMG||Hist-géo||1.5": {
+          "220": 1.5
+        },
+        "1STMG||Ens. Moral et Civique||1": {
+          "220": 1
+        },
+        "TG1||Hist-Géo||3": {
+          "227": 3
+        },
+        "TG1||Ens. Moral et Civique||1": {
+          "227": 1
+        },
+        "TG1||HG Géopolitique et sc. Po||6": {
+          "220": 6
+        },
+        "TG1||Droit grands enjeux monde contemp.||3": {
+          "220": 3
+        },
+        "TG2||Hist-Géo||3": {
+          "208": 3
+        },
+        "TG2||Ens. Moral et Civique||1": {
+          "208": 1
+        },
+        "TSTMG||Hist-géo||1.5": {
+          "208": 1.5
+        },
+        "TSTMG||Ens. Moral et Civique||1": {
+          "208": 1
         }
       }
     },
