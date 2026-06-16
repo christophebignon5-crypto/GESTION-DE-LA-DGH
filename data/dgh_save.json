@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-15T22:26:24.474Z",
+  "date": "2026-06-16T17:40:01.376Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4493,6 +4493,47 @@
         },
         "1BTS GTLA||Culture économique, juridique et managériale appliquée au transport et aux prestations logistiques||2": {
           "228": 2
+        }
+      },
+      "L1000": {
+        "2GT1||Hist-géo||4": {
+          "227": 4
+        },
+        "2GT1||Ens. Moral et Civique||1": {
+          "227": 1
+        },
+        "2GT2||Hist-géo||4": {
+          "208": 4
+        },
+        "2GT2||Ens. Moral et Civique||1": {
+          "208": 1
+        },
+        "2GT3||Hist-géo||4": {
+          "220": 4
+        },
+        "2GT3||Ens. Moral et Civique||1": {
+          "220": 1
+        },
+        "2GT4||Hist-géo||4": {
+          "208": 4
+        },
+        "2GT4||Ens. Moral et Civique||1": {
+          "208": 1
+        },
+        "1G1||Hist-géo||3": {
+          "220": 3
+        },
+        "1G1||Ens. Moral et Civique||1": {
+          "220": 1
+        },
+        "1G1||HG Géopolitique et sc. Po||4": {
+          "220": 4
+        },
+        "1G2||Hist-géo||3": {
+          "227": 3
+        },
+        "1G2||Ens. Moral et Civique||1": {
+          "227": 1
         }
       }
     },
