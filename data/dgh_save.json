@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-16T17:44:24.783Z",
+  "date": "2026-06-16T17:44:55.840Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4536,10 +4536,10 @@
           "227": 1
         },
         "1STMG||Hist-géo||1.5": {
-          "220": 1.5
+          "208": 1.5
         },
         "1STMG||Ens. Moral et Civique||1": {
-          "220": 1
+          "208": 1
         },
         "TG1||Hist-Géo||3": {
           "227": 3
