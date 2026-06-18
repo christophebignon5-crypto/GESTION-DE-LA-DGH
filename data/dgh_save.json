@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-18T15:49:04.868Z",
+  "date": "2026-06-18T15:50:15.221Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4471,14 +4471,12 @@
           "230": 4
         },
         "TG1||Physique-Chimie||6": {
-          "230": 6
+          "214": 0
         },
         "TG1||Ens. Scientifique SPC||2": {
           "214": 2
         },
-        "TG2||Ens. Scientifique SPC||2": {
-          "214": 2
-        },
+        "TG2||Ens. Scientifique SPC||2": {},
         "2GT1||Physique-Chimie||4": {
           "214": 4
         },
