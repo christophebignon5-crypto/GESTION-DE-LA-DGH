@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-18T15:51:38.777Z",
+  "date": "2026-06-18T15:53:42.244Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4599,6 +4599,18 @@
         },
         "2GT4||Français||5": {
           "225": 5
+        }
+      },
+      "L0100": {
+        "1G1||Humanités, Litt. et Philo||4": {},
+        "TG1||Philosophie||4": {
+          "211": 4
+        },
+        "TG2||Philosophie||4": {
+          "211": 4
+        },
+        "TSTMG||Philosophie||4": {
+          "211": 4
         }
       }
     },
