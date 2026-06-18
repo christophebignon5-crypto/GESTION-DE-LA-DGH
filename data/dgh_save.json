@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-18T15:50:15.221Z",
+  "date": "2026-06-18T15:51:25.985Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4449,42 +4449,32 @@
         "2GT2||Physique-Chimie||4.5": {
           "214": 4.5
         },
-        "2GT2||Sc. du numérique et tech.||2.5": {
-          "230": 2.5
-        },
-        "2GT3||Physique-Chimie||4.5": {
-          "230": 4.5
-        },
-        "2GT4||Physique-Chimie||4": {
-          "230": 4
-        },
-        "2GT4||Physique-Chimie||4.5": {
-          "230": 4.5
-        },
         "1G1||Ens. Scientifique SPC||2": {
           "214": 2
         },
         "1G2||Ens. Scientifique SPC||2": {
           "214": 2
         },
+        "TG1||Physique-Chimie||6": {
+          "214": 6
+        },
+        "2GT2||Sc. du numérique et tech.||2.5": {
+          "230": 2.5
+        },
+        "2GT3||Physique-Chimie||4.5": {
+          "230": 4.5
+        },
+        "2GT4||Physique-Chimie||4.5": {
+          "230": 4.5
+        },
         "1G1||Physique-Chimie||4": {
           "230": 4
         },
-        "TG1||Physique-Chimie||6": {
-          "214": 0
-        },
         "TG1||Ens. Scientifique SPC||2": {
-          "214": 2
+          "230": 2
         },
-        "TG2||Ens. Scientifique SPC||2": {},
-        "2GT1||Physique-Chimie||4": {
-          "214": 4
-        },
-        "2GT2||Physique-Chimie||4": {
-          "214": 4
-        },
-        "2GT3||Physique-Chimie||4": {
-          "230": 4
+        "TG2||Ens. Scientifique SPC||2": {
+          "230": 2
         }
       },
       "L8031": {
