@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-18T14:34:55.859Z",
+  "date": "2026-06-18T14:37:40.143Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -1837,7 +1837,7 @@
           "nbCl": 1.5,
           "nbGr": 1.5,
           "disc1": "L1500",
-          "h1": 4,
+          "h1": 4.5,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -4446,44 +4446,39 @@
         }
       },
       "L1500": {
-        "1G1||Ens. Scientifique SPC||2": {
-          "214": 2
-        },
-        "1G1||Physique-Chimie||4": {
-          "230": 4
-        },
-        "1G2||Ens. Scientifique SPC||2": {
-          "214": 2
-        },
-        "2GT1||Physique-Chimie||4": {
-          "214": 4
-        },
-        "2GT2||Physique-Chimie||4": {
-          "214": 4
-        },
-        "2GT3||Physique-Chimie||4": {
-          "230": 4
-        },
-        "2GT4||Physique-Chimie||4": {
-          "230": 4
-        },
-        "TG1||Ens. Scientifique SPC||2": {
-          "230": 2
-        },
-        "TG2||Ens. Scientifique SPC||2": {
-          "230": 0
-        },
-        "TG1||Physique-Chimie||6": {
-          "214": 0
-        },
         "2GT1||Physique-Chimie||4.5": {
           "214": 4.5
         },
         "2GT2||Physique-Chimie||4.5": {
           "214": 4.5
         },
+        "2GT2||Sc. du numérique et tech.||2.5": {
+          "230": 2.5
+        },
         "2GT3||Physique-Chimie||4.5": {
           "230": 4.5
+        },
+        "2GT4||Physique-Chimie||4": {},
+        "2GT4||Physique-Chimie||4.5": {
+          "230": 4.5
+        },
+        "1G1||Ens. Scientifique SPC||2": {
+          "214": 2
+        },
+        "1G2||Ens. Scientifique SPC||2": {
+          "214": 2
+        },
+        "1G1||Physique-Chimie||4": {
+          "230": 4
+        },
+        "TG1||Physique-Chimie||6": {
+          "214": 6
+        },
+        "TG1||Ens. Scientifique SPC||2": {
+          "230": 2
+        },
+        "TG2||Ens. Scientifique SPC||2": {
+          "230": 2
         }
       },
       "L8031": {
