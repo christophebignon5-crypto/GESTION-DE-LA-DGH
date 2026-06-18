@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-18T14:45:40.502Z",
+  "date": "2026-06-18T15:39:47.761Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4416,12 +4416,15 @@
           "212": 6
         },
         "TG2||Ens. Scientifique SVT||2": {
-          "217": 2
+          "212": 2
         },
         "1G2||Ens. Scientifique SVT||2": {
           "217": 2
         },
         "1G1||Ens. Scientifique SVT||2": {
+          "217": 2
+        },
+        "1G3||Ens. Scientifique SVT||2": {
           "217": 2
         }
       },
@@ -4455,7 +4458,9 @@
         "2GT3||Physique-Chimie||4.5": {
           "230": 4.5
         },
-        "2GT4||Physique-Chimie||4": {},
+        "2GT4||Physique-Chimie||4": {
+          "230": 4
+        },
         "2GT4||Physique-Chimie||4.5": {
           "230": 4.5
         },
@@ -4469,13 +4474,22 @@
           "230": 4
         },
         "TG1||Physique-Chimie||6": {
-          "214": 6
+          "230": 6
         },
         "TG1||Ens. Scientifique SPC||2": {
-          "230": 2
+          "214": 2
         },
         "TG2||Ens. Scientifique SPC||2": {
-          "230": 2
+          "214": 2
+        },
+        "2GT1||Physique-Chimie||4": {
+          "214": 4
+        },
+        "2GT2||Physique-Chimie||4": {
+          "214": 4
+        },
+        "2GT3||Physique-Chimie||4": {
+          "230": 4
         }
       },
       "L8031": {
@@ -4565,6 +4579,41 @@
         },
         "TSTMG||Ens. Moral et Civique||1": {
           "208": 1
+        }
+      },
+      "L0202": {
+        "2GT1||Français||5": {
+          "225": 5
+        },
+        "2GT2||Français||5": {
+          "225": 5
+        },
+        "2GT3||Français||5": {
+          "225": 5
+        },
+        "1G1||Français||4": {
+          "209": 4
+        },
+        "1G2||Français||4": {
+          "225": 4
+        },
+        "1STMG||Français||6": {
+          "209": 6
+        },
+        "1BTS CI||Culture gén. et expression||2": {
+          "209": 2
+        },
+        "1BTS GTLA||Culture gén. et expression||2": {
+          "209": 2
+        },
+        "2BTS CI||Culture gén. et expression||2": {
+          "209": 2
+        },
+        "2BTS GTLA||Culture gén. et expression||2": {
+          "209": 2
+        },
+        "2GT4||Français||5": {
+          "225": 5
         }
       }
     },
