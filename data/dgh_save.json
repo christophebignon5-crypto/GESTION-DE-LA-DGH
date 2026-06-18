@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-18T14:31:10.747Z",
+  "date": "2026-06-18T14:34:21.887Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -1410,10 +1410,10 @@
         {
           "hcl": 2,
           "hgr": 1,
-          "nbCl": 1,
-          "nbGr": 2,
+          "nbCl": 1.5,
+          "nbGr": 1.5,
           "disc1": "L1500",
-          "h1": 4,
+          "h1": 4.5,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -1622,10 +1622,10 @@
         {
           "hcl": 2,
           "hgr": 1,
-          "nbCl": 1,
-          "nbGr": 2,
+          "nbCl": 1.5,
+          "nbGr": 1.5,
           "disc1": "L1500",
-          "h1": 4,
+          "h1": 4.5,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -1834,8 +1834,8 @@
         {
           "hcl": 2,
           "hgr": 1,
-          "nbCl": 1,
-          "nbGr": 2,
+          "nbCl": 1.5,
+          "nbGr": 1.5,
           "disc1": "L1500",
           "h1": 4,
           "disc2": "—",
@@ -4179,10 +4179,10 @@
         {
           "hcl": 2,
           "hgr": 1,
-          "nbCl": 1,
-          "nbGr": 2,
+          "nbCl": 1.5,
+          "nbGr": 1.5,
           "disc1": "L1500",
-          "h1": 4,
+          "h1": 4.5,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -4475,6 +4475,15 @@
         },
         "TG1||Physique-Chimie||6": {
           "230": 6
+        },
+        "2GT1||Physique-Chimie||4.5": {
+          "214": 4.5
+        },
+        "2GT2||Physique-Chimie||4.5": {
+          "214": 4.5
+        },
+        "2GT3||Physique-Chimie||4.5": {
+          "230": 4.5
         }
       },
       "L8031": {
@@ -4567,7 +4576,8 @@
         }
       }
     },
-    "repCollapsed": {}
+    "repCollapsed": {},
+    "ventMatrixCollapsed": {}
   },
   "sep_state": {
     "dgh": {
