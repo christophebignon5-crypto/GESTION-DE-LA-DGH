@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-22T16:02:17.071Z",
+  "date": "2026-06-22T16:05:08.891Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4668,6 +4668,17 @@
         },
         "1BTS CI||Portugais||4": {
           "219": 4
+        }
+      },
+      "AUTRE_CAV": {
+        "2GT1||Cinéma Audiovisuel||3": {
+          "241": 3
+        },
+        "1G1||Cinéma Audiovisuel||3": {
+          "241": 3
+        },
+        "TG1||Cinéma Audiovisuel||3": {
+          "241": 3
         }
       }
     },
