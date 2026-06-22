@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-22T14:53:11.383Z",
+  "date": "2026-06-22T16:02:17.071Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -430,19 +430,6 @@
         "prenom": "JANISHA",
         "discipline": "L0422",
         "mat": "L0422",
-        "quotite": 18,
-        "csd": 0,
-        "decharge": 0,
-        "dechargeType": "",
-        "bmp": false,
-        "bmpQuotite": 0
-      },
-      {
-        "id": 222,
-        "nom": "MOLINARI",
-        "prenom": "MARION",
-        "discipline": "L0202",
-        "mat": "L0202",
         "quotite": 18,
         "csd": 0,
         "decharge": 0,
