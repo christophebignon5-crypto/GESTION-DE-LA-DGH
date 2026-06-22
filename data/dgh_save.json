@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-22T14:03:48.438Z",
+  "date": "2026-06-22T14:12:41.017Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -5475,8 +5475,8 @@
       },
       {
         "id": 234,
-        "nom": "LORENT",
-        "prenom": "JEAN-PAUL",
+        "nom": "VASQUEZ PIPER",
+        "prenom": "MARIA DE JESUS",
         "discipline": "P2200",
         "mat": "P2200",
         "quotite": 18,
@@ -5484,7 +5484,8 @@
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": ""
       },
       {
         "id": 235,
