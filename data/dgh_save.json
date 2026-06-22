@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-22T20:26:40.748Z",
+  "date": "2026-06-22T20:27:18.504Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -14943,9 +14943,6 @@
         "1BP||1BP BOU||ANG": {
           "259": 2
         },
-        "1BP||1BP MCC||ANG": {
-          "207": 2
-        },
         "1BP||1BP MET||ANG": {
           "212": 2
         },
@@ -14987,6 +14984,9 @@
         },
         "CS||CS Organisateurs de Réception||ANG": {
           "207": 3
+        },
+        "1BP||1BP MCC||ANG": {
+          "212": 2
         }
       },
       "P8013": {
