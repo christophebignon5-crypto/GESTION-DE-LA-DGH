@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-23T21:29:47.937Z",
+  "date": "2026-06-23T21:41:50.821Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -370,7 +370,7 @@
         "prenom": "ERWAN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 4,
+        "quotite": 6,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
@@ -443,7 +443,7 @@
         "prenom": "CINDY",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 6,
+        "quotite": 8,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
@@ -4717,7 +4717,8 @@
         }
       }
     },
-    "repCollapsed": {}
+    "repCollapsed": {},
+    "ventMatrixCollapsed": {}
   },
   "sep_state": {
     "dgh": {
