@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-23T21:24:36.272Z",
+  "date": "2026-06-23T21:25:29.898Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -15663,6 +15663,7 @@
           "274": 2
         },
         "2BP||2BP MRC||EPS": {
+          "240": 2.5,
           "274": 2.5
         },
         "TCAP2||TCAP2 EPC1||EPS": {
@@ -15670,6 +15671,15 @@
         },
         "TBP||TBP MCC||EPS": {
           "274": 3
+        },
+        "1BP||1BP POI||EPS": {
+          "240": 2.5
+        },
+        "TBP||TBP Métiers de l'Accueil||EPS": {
+          "240": 3
+        },
+        "TBP||TBP Métiers Commerce et Vente||EPS": {
+          "240": 3
         }
       }
     },
