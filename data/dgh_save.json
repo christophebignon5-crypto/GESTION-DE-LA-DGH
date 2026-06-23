@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-23T21:52:09.706Z",
+  "date": "2026-06-23T21:54:26.289Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -5937,7 +5937,7 @@
         "discipline": "L1900",
         "discAutre": "",
         "mat": "L1900",
-        "quotite": 12.5,
+        "quotite": 11,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
