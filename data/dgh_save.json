@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-23T22:04:54.737Z",
+  "date": "2026-06-25T10:41:09.873Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -4425,9 +4425,7 @@
         }
       },
       "L0422": {
-        "TG1||LLCE Anglais||6": {
-          "221": 6
-        },
+        "TG1||LLCE Anglais||6": {},
         "1G1||LLCE Anglais||4": {
           "221": 4
         },
@@ -4438,6 +4436,30 @@
           "221": 2
         },
         "2BTS CI||Anglais A||3": {
+          "221": 3
+        },
+        "2GT1||Anglais 1||3": {
+          "240": 3
+        },
+        "2GT2||Anglais 1||3": {
+          "240": 3
+        },
+        "2GT3||Anglais 1||3": {
+          "240": 3
+        },
+        "1G1||Anglais A||2.5": {
+          "221": 2.5
+        },
+        "1G2||Anglais A||2.5": {
+          "221": 2.5
+        },
+        "1STMG||Anglais 1 (dont ETLV)||3": {
+          "221": 3
+        },
+        "TG2||Anglais A||2": {
+          "221": 2
+        },
+        "TSTMG||Anglais 1 (dont ETLV)||3": {
           "221": 3
         }
       },
@@ -4717,8 +4739,7 @@
         }
       }
     },
-    "repCollapsed": {},
-    "ventMatrixCollapsed": {}
+    "repCollapsed": {}
   },
   "sep_state": {
     "dgh": {
