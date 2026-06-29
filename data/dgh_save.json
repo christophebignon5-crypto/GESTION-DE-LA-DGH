@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T15:13:49.821Z",
+  "date": "2026-06-29T15:16:12.727Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -426,8 +426,8 @@
       },
       {
         "id": 221,
-        "nom": "MEULENHOF",
-        "prenom": "JANISHA",
+        "nom": "DE MOURA",
+        "prenom": "GEORGE",
         "discipline": "L0422",
         "mat": "L0422",
         "quotite": 18,
@@ -435,7 +435,11 @@
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": "",
+        "niveauTerminal": false,
+        "niveauBTS": false,
+        "ors": 18
       },
       {
         "id": 223,
@@ -4756,7 +4760,8 @@
         }
       }
     },
-    "repCollapsed": {}
+    "repCollapsed": {},
+    "ventMatrixCollapsed": {}
   },
   "sep_state": {
     "dgh": {
