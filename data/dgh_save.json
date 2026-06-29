@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T11:47:30.248Z",
+  "date": "2026-06-29T11:48:17.417Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -15387,7 +15387,8 @@
           "217": 1
         },
         "TCAP2||TCAP2 Mode Vêtement Tailleur||ETP": {
-          "217": 6
+          "217": 6,
+          "268": 6
         },
         "1CAP2||1CAP2 AFAT||ETP": {
           "234": 1
@@ -15397,6 +15398,9 @@
         },
         "2BP||2BP MCC||Co-MATHS-ETP": {
           "234": 0.5
+        },
+        "Autre||3EME PREPA METIER||3PM": {
+          "268": 1
         }
       },
       "P7200": {
