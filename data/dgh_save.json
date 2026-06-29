@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T21:07:19.267Z",
+  "date": "2026-06-29T21:08:17.033Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -14792,9 +14792,11 @@
         },
         "1CAP2||1CAP2 AFAT||Co-FR-ETP": {
           "203": 0,
+          "246": 1.5,
           "254": 0
         },
         "1CAP2||1CAP2 AFAT||Chef Œuvre Pro": {
+          "246": 1.5,
           "270": 0
         },
         "1CAP2||1CAP2 EPC1||ETP": {
@@ -14999,7 +15001,8 @@
           "222": 1.5
         },
         "1CAP2||1CAP2 AFAT||ETP": {
-          "222": 2
+          "222": 2,
+          "246": 2.5
         },
         "1CAP2||1CAP2 EPC1||Chef Œuvre Pro": {
           "228": 1.5
