@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T20:59:10.291Z",
+  "date": "2026-06-29T21:00:28.519Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -14798,7 +14798,8 @@
           "270": 0
         },
         "1CAP2||1CAP2 EPC1||ETP": {
-          "215": 0
+          "215": 0,
+          "222": 4.5
         },
         "TCAP2||TCAP2 EPC1||ETP": {
           "203": 6,
@@ -14968,7 +14969,8 @@
         },
         "2BP||2BP MRC||ETP": {
           "211": 6,
-          "219": 6
+          "219": 6,
+          "222": 12
         },
         "2BP||2BP MET||CEJM": {
           "215": 1
@@ -14981,6 +14983,18 @@
         },
         "2BP||2BP MRC||Co-MATHS-ETP": {
           "219": 0.5
+        },
+        "CS||CS Essayage Vente et retouche||Eco-Gest": {
+          "219": 2
+        },
+        "Autre||3EME PREPA METIER||3PM": {
+          "219": 1
+        },
+        "1CAP2||1CAP2 AFAT||Co-MATHS-ETP": {
+          "222": 1.5
+        },
+        "1CAP2||1CAP2 AFAT||ETP": {
+          "222": 2
         }
       },
       "P2200": {
