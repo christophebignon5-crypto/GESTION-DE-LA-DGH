@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T21:02:57.412Z",
+  "date": "2026-06-29T21:06:53.899Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -14901,7 +14901,8 @@
           "246": 12
         },
         "1BP||1BP Métiers Commerce et Vente||Projet": {
-          "246": 3
+          "244": 1.5,
+          "246": 1.5
         },
         "1BP||1BP Métiers Commerce et Vente||Parcours": {
           "244": 1
