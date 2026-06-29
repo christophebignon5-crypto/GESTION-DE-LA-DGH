@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T20:57:47.383Z",
+  "date": "2026-06-29T20:59:10.291Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -14967,13 +14967,20 @@
           "270": 1
         },
         "2BP||2BP MRC||ETP": {
-          "211": 6
+          "211": 6,
+          "219": 6
         },
         "2BP||2BP MET||CEJM": {
           "215": 1
         },
         "2BP||2BP ALIM||CEJM": {
           "215": 1
+        },
+        "2BP||2BP MRC||Co-FR-ETP": {
+          "219": 0.5
+        },
+        "2BP||2BP MRC||Co-MATHS-ETP": {
+          "219": 0.5
         }
       },
       "P2200": {
