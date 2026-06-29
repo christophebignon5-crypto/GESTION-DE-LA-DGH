@@ -1,11 +1,12 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T20:21:09.455Z",
+  "date": "2026-06-29T20:28:44.829Z",
   "params": {
+    "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
-    "ville": "Mana",
     "academie": "Guyane",
-    "annee": "2026-2027"
+    "ville": "Mana",
+    "uai": "9730421V"
   },
   "lgt_state": {
     "dgh": {
@@ -184,16 +185,12 @@
         "prenom": "MARTIN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 2,
+        "quotite": 20,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": "",
-        "niveauTerminal": false,
-        "niveauBTS": false,
-        "ors": 18
+        "bmpQuotite": 0
       },
       {
         "id": 202,
@@ -370,7 +367,7 @@
         "prenom": "ERWAN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 6,
+        "quotite": 18,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
@@ -426,8 +423,8 @@
       },
       {
         "id": 221,
-        "nom": "DE MOURA",
-        "prenom": "GEORGE",
+        "nom": "MEULENHOF",
+        "prenom": "JANISHA",
         "discipline": "L0422",
         "mat": "L0422",
         "quotite": 18,
@@ -435,11 +432,20 @@
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": "",
-        "niveauTerminal": false,
-        "niveauBTS": false,
-        "ors": 18
+        "bmpQuotite": 0
+      },
+      {
+        "id": 222,
+        "nom": "MOLINARI",
+        "prenom": "MARION",
+        "discipline": "L0202",
+        "mat": "L0202",
+        "quotite": 18,
+        "csd": 0,
+        "decharge": 0,
+        "dechargeType": "",
+        "bmp": false,
+        "bmpQuotite": 0
       },
       {
         "id": 223,
@@ -447,16 +453,12 @@
         "prenom": "CINDY",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 8,
+        "quotite": 20,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": "",
-        "niveauTerminal": false,
-        "niveauBTS": false,
-        "ors": 18
+        "bmpQuotite": 0
       },
       {
         "id": 224,
@@ -555,16 +557,12 @@
         "prenom": "Yoris",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 7,
+        "quotite": 20,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": "",
-        "niveauTerminal": false,
-        "niveauBTS": false,
-        "ors": 18
+        "bmpQuotite": 0
       },
       {
         "id": 236,
@@ -1413,10 +1411,10 @@
         {
           "hcl": 2,
           "hgr": 1,
-          "nbCl": 1.5,
-          "nbGr": 1.5,
+          "nbCl": 1,
+          "nbGr": 2,
           "disc1": "L1500",
-          "h1": 4.5,
+          "h1": 4,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -1625,10 +1623,10 @@
         {
           "hcl": 2,
           "hgr": 1,
-          "nbCl": 1.5,
-          "nbGr": 1.5,
+          "nbCl": 1,
+          "nbGr": 2,
           "disc1": "L1500",
-          "h1": 4.5,
+          "h1": 4,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -1837,10 +1835,10 @@
         {
           "hcl": 2,
           "hgr": 1,
-          "nbCl": 1.5,
-          "nbGr": 1.5,
+          "nbCl": 1,
+          "nbGr": 2,
           "disc1": "L1500",
-          "h1": 4.5,
+          "h1": 4,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -2121,9 +2119,9 @@
           "hcl": 0,
           "hgr": 4,
           "nbCl": 0,
-          "nbGr": 0,
-          "disc1": "—",
-          "h1": 0,
+          "nbGr": 1,
+          "disc1": "L0100",
+          "h1": 4,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -4086,7 +4084,7 @@
           "hgr": 1,
           "nbCl": 1,
           "nbGr": 2,
-          "disc1": "L0100",
+          "disc1": "L0202",
           "h1": 5,
           "disc2": "—",
           "h2": 0,
@@ -4182,10 +4180,10 @@
         {
           "hcl": 2,
           "hgr": 1,
-          "nbCl": 1.5,
-          "nbGr": 1.5,
+          "nbCl": 1,
+          "nbGr": 2,
           "disc1": "L1500",
-          "h1": 4.5,
+          "h1": 4,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
@@ -4396,17 +4394,27 @@
         }
       },
       "L1600": {
-        "1G1||Ens. Scientifique SVT||2": {
-          "217": 2
-        },
         "2GT1||S.V.T.||3": {
           "212": 3
         },
         "2GT2||S.V.T.||3": {
           "217": 3
         },
-        "2GT4||S.V.T.||3": {
-          "212": 3
+        "2GT3||S.V.T.||3": {
+          "217": 3
+        },
+        "1G1||Ens. Scientifique SVT||2": {
+          "217": 2
+        },
+        "1G1||S.V.T.||8": {
+          "212": 4,
+          "217": 4
+        },
+        "1G2||Ens. Scientifique SVT||2": {
+          "217": 2
+        },
+        "1G3||Ens. Scientifique SVT||2": {
+          "217": 2
         },
         "TG1||Ens. Scientifique SVT||2": {
           "212": 2
@@ -4414,18 +4422,11 @@
         "TG1||S.V.T.||6": {
           "212": 6
         },
-        "1G1||S.V.T.||8": {
-          "212": 4,
-          "217": 4
-        },
-        "2GT3||S.V.T.||3": {
-          "217": 3
-        },
-        "1G2||Ens. Scientifique SVT||2": {
-          "217": 2
-        },
         "TG2||Ens. Scientifique SVT||2": {
-          "217": 2
+          "212": 2
+        },
+        "2GT4||S.V.T.||3": {
+          "212": 3
         }
       },
       "L0422": {
@@ -4433,90 +4434,48 @@
           "221": 6
         },
         "1G1||LLCE Anglais||4": {
-          "229": 4
-        },
-        "2BTS GTLA||Anglais A||3": {
-          "229": 3
-        },
-        "2BTS CI||RCI Anglais & Éco-gestion||2": {
-          "240": 2
-        },
-        "2BTS CI||Anglais A||3": {
-          "240": 3
-        },
-        "2GT1||Anglais 1||3": {
-          "240": 3
-        },
-        "2GT2||Anglais 1||3": {
-          "240": 3
-        },
-        "2GT3||Anglais 1||3": {
-          "240": 3
-        },
-        "1G1||Anglais A||2.5": {
-          "229": 2.5
-        },
-        "1G2||Anglais A||2.5": {
-          "229": 2.5
-        },
-        "1STMG||Anglais 1 (dont ETLV)||3": {
-          "229": 3
-        },
-        "TG2||Anglais A||2": {
-          "240": 2
-        },
-        "TSTMG||Anglais 1 (dont ETLV)||3": {
-          "221": 3
-        },
-        "1BTS GTLA||Anglais A||3": {
-          "240": 3
-        },
-        "2GT4||Anglais 1||3": {
-          "229": 3
-        },
-        "TG1||Anglais A||2": {
-          "221": 2
-        },
-        "1BTS CI||Anglais A||4": {
           "221": 4
         },
-        "1BTS CI||RCI Anglais & Éco-gestion||1": {
-          "221": 1
+        "2BTS GTLA||Anglais A||3": {
+          "221": 3
+        },
+        "2BTS CI||RCI Anglais & Éco-gestion||2": {
+          "221": 2
+        },
+        "2BTS CI||Anglais A||3": {
+          "221": 3
         }
       },
       "L1500": {
-        "2GT1||Physique-Chimie||4.5": {
-          "214": 4.5
-        },
-        "2GT2||Physique-Chimie||4.5": {
-          "214": 4.5
-        },
         "1G1||Ens. Scientifique SPC||2": {
           "214": 2
-        },
-        "1G2||Ens. Scientifique SPC||2": {
-          "214": 2
-        },
-        "TG1||Physique-Chimie||6": {
-          "214": 6
-        },
-        "2GT2||Sc. du numérique et tech.||2.5": {
-          "230": 2.5
-        },
-        "2GT3||Physique-Chimie||4.5": {
-          "230": 4.5
-        },
-        "2GT4||Physique-Chimie||4.5": {
-          "230": 4.5
         },
         "1G1||Physique-Chimie||4": {
           "230": 4
         },
+        "1G2||Ens. Scientifique SPC||2": {
+          "214": 2
+        },
+        "2GT1||Physique-Chimie||4": {
+          "214": 4
+        },
+        "2GT2||Physique-Chimie||4": {
+          "214": 4
+        },
+        "2GT3||Physique-Chimie||4": {
+          "230": 4
+        },
+        "2GT4||Physique-Chimie||4": {
+          "230": 4
+        },
         "TG1||Ens. Scientifique SPC||2": {
-          "230": 2
+          "214": 2
         },
         "TG2||Ens. Scientifique SPC||2": {
-          "230": 2
+          "214": 2
+        },
+        "TG1||Physique-Chimie||6": {
+          "230": 6
         }
       },
       "L8031": {
@@ -4535,228 +4494,6 @@
         },
         "1BTS GTLA||Culture économique, juridique et managériale appliquée au transport et aux prestations logistiques||2": {
           "228": 2
-        }
-      },
-      "L1000": {
-        "2GT1||Hist-géo||4": {
-          "227": 4
-        },
-        "2GT1||Ens. Moral et Civique||1": {
-          "227": 1
-        },
-        "2GT2||Hist-géo||4": {
-          "227": 4
-        },
-        "2GT2||Ens. Moral et Civique||1": {
-          "227": 1
-        },
-        "2GT3||Hist-géo||4": {
-          "208": 4
-        },
-        "2GT3||Ens. Moral et Civique||1": {
-          "208": 1
-        },
-        "2GT4||Hist-géo||4": {
-          "208": 4
-        },
-        "2GT4||Ens. Moral et Civique||1": {
-          "208": 1
-        },
-        "1G1||Hist-géo||3": {
-          "220": 3
-        },
-        "1G1||Ens. Moral et Civique||1": {
-          "220": 1
-        },
-        "1G1||HG Géopolitique et sc. Po||4": {
-          "220": 4
-        },
-        "1G2||Hist-géo||3": {
-          "227": 3
-        },
-        "1G2||Ens. Moral et Civique||1": {
-          "227": 1
-        },
-        "1STMG||Hist-géo||1.5": {
-          "208": 1.5
-        },
-        "1STMG||Ens. Moral et Civique||1": {
-          "208": 1
-        },
-        "TG1||Hist-Géo||3": {
-          "227": 3
-        },
-        "TG1||Ens. Moral et Civique||1": {
-          "227": 1
-        },
-        "TG1||HG Géopolitique et sc. Po||6": {
-          "220": 6
-        },
-        "TG1||Droit grands enjeux monde contemp.||3": {
-          "220": 3
-        },
-        "TG2||Hist-Géo||3": {
-          "208": 3
-        },
-        "TG2||Ens. Moral et Civique||1": {
-          "208": 1
-        },
-        "TSTMG||Hist-géo||1.5": {
-          "208": 1.5
-        },
-        "TSTMG||Ens. Moral et Civique||1": {
-          "208": 1
-        }
-      },
-      "L0202": {
-        "2GT1||Français||5": {
-          "225": 5
-        },
-        "2GT2||Français||5": {
-          "225": 5
-        },
-        "2GT3||Français||5": {
-          "225": 5
-        },
-        "1G1||Français||4": {
-          "209": 4
-        },
-        "1G2||Français||4": {
-          "225": 4
-        },
-        "1STMG||Français||6": {
-          "209": 6
-        },
-        "1BTS CI||Culture gén. et expression||2": {
-          "209": 2
-        },
-        "1BTS GTLA||Culture gén. et expression||2": {
-          "209": 2
-        },
-        "2BTS CI||Culture gén. et expression||2": {
-          "209": 2
-        },
-        "2BTS GTLA||Culture gén. et expression||2": {
-          "209": 2
-        },
-        "2GT4||Français||5": {
-          "225": 5
-        }
-      },
-      "L0100": {
-        "1G1||Humanités, Litt. et Philo||4": {},
-        "TG1||Philosophie||4": {
-          "211": 4
-        },
-        "TG2||Philosophie||4": {
-          "211": 4
-        },
-        "TSTMG||Philosophie||4": {
-          "211": 4
-        },
-        "2GT1||Français||5": {
-          "211": 5
-        }
-      },
-      "L0426": {
-        "2GT1||Espagnol 2||3": {
-          "204": 3
-        },
-        "2GT2||Espagnol 2||3": {
-          "204": 3
-        },
-        "1G1||Espagnol B||2": {
-          "204": 2
-        },
-        "TG1||Espagnol B||2": {
-          "204": 2
-        },
-        "TSTMG||Espagnol 2||4": {
-          "204": 4
-        },
-        "1BTS CI||Espagnol||4": {
-          "204": 4
-        },
-        "2GT3||Espagnol 2||3": {
-          "210": 3
-        },
-        "2GT4||Espagnol 2||3": {
-          "210": 3
-        },
-        "1G1||LLCE Espagnol||4": {
-          "210": 4
-        },
-        "1G2||Espagnol B||2": {
-          "210": 2
-        },
-        "1STMG||Espagnol 2||2": {
-          "210": 2
-        },
-        "TG2||Espagnol B||2": {
-          "210": 2
-        },
-        "2BTS CI||Espagnol||3": {
-          "210": 3
-        }
-      },
-      "L0433": {
-        "2GT1||Portugais 2||2.5": {
-          "219": 2.5
-        },
-        "1G1||Portugais B||2": {
-          "219": 2
-        },
-        "TG1||Portugais B||2": {
-          "219": 2
-        },
-        "1BTS CI||Portugais||4": {
-          "219": 4
-        }
-      },
-      "AUTRE_CAV": {
-        "2GT1||Cinéma Audiovisuel||3": {
-          "241": 3
-        },
-        "1G1||Cinéma Audiovisuel||3": {
-          "241": 3
-        },
-        "TG1||Cinéma Audiovisuel||3": {
-          "241": 3
-        }
-      },
-      "L1900": {
-        "1G1||E.P.S.||2": {
-          "201": 2
-        },
-        "1G2||E.P.S.||2": {
-          "223": 2
-        },
-        "2GT1||E.P.S.||2": {
-          "223": 2
-        },
-        "TG2||E.P.S.||2": {
-          "223": 2
-        },
-        "2GT3||E.P.S.||2": {
-          "216": 2
-        },
-        "2GT4||E.P.S.||2": {
-          "216": 2
-        },
-        "TG1||E.P.S.||2": {
-          "216": 2
-        },
-        "1STMG||E.P.S.||2": {
-          "231": 2
-        },
-        "2GT2||E.P.S.||2": {
-          "231": 2
-        },
-        "TSTMG||E.P.S.||2": {
-          "231": 2
-        },
-        "UNSS||UNSS||3": {
-          "231": 3
         }
       }
     },
@@ -5278,13 +5015,12 @@
         "prenom": "MARTIN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 18,
+        "quotite": 20,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": ""
+        "bmpQuotite": 0
       },
       {
         "id": 209,
@@ -5528,13 +5264,12 @@
         "prenom": "ERWAN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 14,
+        "quotite": 20,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": ""
+        "bmpQuotite": 0
       },
       {
         "id": 232,
@@ -5551,8 +5286,8 @@
       },
       {
         "id": 234,
-        "nom": "VASQUEZ PIPER",
-        "prenom": "MARIA DE JESUS",
+        "nom": "LORENT",
+        "prenom": "JEAN-PAUL",
         "discipline": "P2200",
         "mat": "P2200",
         "quotite": 18,
@@ -5560,8 +5295,7 @@
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": ""
+        "bmpQuotite": 0
       },
       {
         "id": 235,
@@ -5609,13 +5343,12 @@
         "prenom": "CINDY",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 12,
+        "quotite": 20,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0,
-        "discAutre": ""
+        "bmpQuotite": 0
       },
       {
         "id": 241,
@@ -5973,20 +5706,6 @@
         "bmp": false,
         "bmpQuotite": 0,
         "id": 273
-      },
-      {
-        "nom": "WITTENS",
-        "prenom": "YORIS",
-        "discipline": "L1900",
-        "discAutre": "",
-        "mat": "L1900",
-        "quotite": 11,
-        "csd": 0,
-        "decharge": 0,
-        "dechargeType": "",
-        "bmp": false,
-        "bmpQuotite": 0,
-        "id": 274
       }
     ],
     "ventilation": {
@@ -13061,15 +12780,14 @@
           "hgr": 0,
           "nbCl": 1,
           "nbGr": 0,
-          "disc1": "P8510",
+          "disc1": "P8518",
           "h1": 1.5,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
           "h3": 0,
           "disc4": "—",
-          "h4": 0,
-          "_matOverride": "Sciences Appliquées"
+          "h4": 0
         },
         {
           "hcl": 0,
@@ -13267,8 +12985,7 @@
           "disc3": "—",
           "h3": 0,
           "disc4": "—",
-          "h4": 0,
-          "_matOverride": "Sciences Appliquées"
+          "h4": 0
         },
         {
           "hcl": 0,
@@ -13637,7 +13354,7 @@
           "_mat": "DECOUVERTE METIERS",
           "_code": "3PM",
           "_cat": "Autre",
-          "hcl": 4,
+          "hcl": 5,
           "hgr": 0,
           "nbCl": 1,
           "nbGr": 0,
@@ -13648,8 +13365,8 @@
           "disc3": "P8013",
           "h3": 1,
           "disc4": "P8510",
-          "h4": 1,
-          "_hRef": 4
+          "h4": 2,
+          "_hRef": 5
         }
       ],
       "UNSS": [
@@ -14811,12 +14528,6 @@
         "1CAP2||1CAP2 Mode Vêtement Flou||AP": {
           "10": 0.5
         },
-        "1CAP2||1CAP2 Mode Vêtement Tailleur||Français": {
-          "10": 1.5
-        },
-        "1CAP2||1CAP2 Mode Vêtement Tailleur||Conso.": {
-          "10": 1
-        },
         "TCAP2||TCAP2 POI||Français": {
           "253": 1.5
         },
@@ -14949,8 +14660,14 @@
           "252": 0.5,
           "263": 0.5
         },
+        "1CAP2||1CAP2 Mode Vêtement Tailleur||Français": {
+          "257": 1.5
+        },
+        "1CAP2||1CAP2 Mode Vêtement Tailleur||Conso.": {
+          "257": 1
+        },
         "CS||CS Organisateurs de Réception||Comm.": {
-          "257": 3
+          "10": 3
         }
       },
       "P0222": {
@@ -15003,7 +14720,8 @@
           "227": 1
         },
         "2BP||2BP ALIM||ANG": {
-          "212": 4
+          "212": 2,
+          "259": 2
         },
         "2BP||2BP MCC||ANG": {
           "207": 2
@@ -15019,6 +14737,9 @@
         },
         "1BP||1BP BOU||ANG": {
           "259": 2
+        },
+        "1BP||1BP MCC||ANG": {
+          "207": 2
         },
         "1BP||1BP MET||ANG": {
           "212": 2
@@ -15053,38 +14774,31 @@
         "CS||CS Organisateurs de Réception||Comm.": {
           "207": 3
         },
+        "CS||CS Organisateurs de Réception||ANG": {
+          "212": 3
+        },
         "1BP||1BP Métiers de l\\'Accueil||ANG": {
           "227": 4
         },
         "TBP||TBP Métiers de l\\'Accueil||ANG": {
           "207": 5
-        },
-        "CS||CS Organisateurs de Réception||ANG": {
-          "207": 3
-        },
-        "1BP||1BP MCC||ANG": {
-          "212": 2
         }
       },
       "P8013": {
         "1BP||1BP Métiers Commerce et Vente||Eco-Droit": {
           "215": 0,
           "219": 0,
-          "270": 1
+          "246": 1
         },
         "1CAP2||1CAP2 AFAT||Co-FR-ETP": {
           "203": 0,
-          "246": 1.5,
           "254": 0
         },
         "1CAP2||1CAP2 AFAT||Chef Œuvre Pro": {
-          "246": 1.5,
           "270": 0
         },
         "1CAP2||1CAP2 EPC1||ETP": {
-          "215": 0,
-          "222": 4.5,
-          "228": 7
+          "215": 0
         },
         "TCAP2||TCAP2 EPC1||ETP": {
           "203": 6,
@@ -15110,13 +14824,11 @@
         },
         "TBP||TBP Métiers de l'Accueil||Projet": {
           "211": 0,
-          "228": 1,
-          "243": 1
+          "228": 2
         },
         "1CAP2||1CAP2 TOUR||ETP": {
           "215": 4,
           "219": 0,
-          "245": 3,
           "254": 4.5
         },
         "1BP||1BP Métiers de l\\'Accueil||ETP": {
@@ -15185,6 +14897,9 @@
           "244": 9,
           "246": 12
         },
+        "1BP||1BP Métiers Commerce et Vente||Projet": {
+          "246": 3
+        },
         "1BP||1BP Métiers Commerce et Vente||Parcours": {
           "244": 1
         },
@@ -15205,7 +14920,6 @@
           "271": 1.5
         },
         "1CAP2||1CAP2 TOUR||Chef Œuvre Pro": {
-          "211": 0,
           "215": 1.5
         },
         "1BP||1BP Métiers de l'Accueil||Co-FR-ETP": {
@@ -15251,81 +14965,23 @@
         },
         "1BP||1BP MCC||Eco-Gestion": {
           "270": 1
-        },
-        "2BP||2BP ALIM||CEJM": {
-          "215": 1
-        },
-        "2BP||2BP MET||CEJM": {
-          "215": 1
-        },
-        "2BP||2BP MRC||ETP": {
-          "211": 6,
-          "219": 6,
-          "222": 12,
-          "235": 12,
-          "266": 6,
-          "270": 6
-        },
-        "2BP||2BP MRC||Éco-Droit": {
-          "219": 0,
-          "266": 1,
-          "270": 1
-        },
-        "2BP||2BP MRC||Co-FR-ETP": {
-          "219": 0.5,
-          "270": 0.5
-        },
-        "2BP||2BP MRC||Co-MATHS-ETP": {
-          "219": 0.5,
-          "270": 0.5
-        },
-        "2BP||2BP MRC||Parcours": {
-          "266": 1,
-          "270": 1
-        },
-        "1CAP2||1CAP EPC2||ETP": {
-          "222": 0,
-          "235": 6,
-          "270": 5.5
-        },
-        "1CAP2||1CAP EPC2||Chef Œuvre Pro": {
-          "270": 1.5
-        },
-        "1CAP2||1CAP2 EPC1||Co-FR-ETP": {
-          "235": 1.5
-        },
-        "1CAP2||1CAP2 EPC1||Co-MATHS-ETP": {
-          "270": 1.5
-        },
-        "1CAP2||1CAP2 EPC1||Chef Œuvre Pro": {
-          "228": 1.5
-        },
-        "1CAP2||1CAP2 AFAT||ETP": {
-          "222": 2,
-          "246": 2.5
-        },
-        "1CAP2||1CAP2 POI||ECO": {
-          "235": 0.5
-        },
-        "1CAP2||1CAP2 AFAT||Co-MATHS-ETP": {
-          "222": 1.5
-        },
-        "1BP||1BP Métiers Commerce et Vente||Projet": {
-          "244": 1.5,
-          "246": 1.5
-        },
-        "CS||CS Essayage Vente et retouche||Eco-Gest": {
-          "219": 2
-        },
-        "Autre||3EME PREPA METIER||3PM": {
-          "219": 1
         }
       },
       "P2200": {
+        "1CAP2||1CAP2 AFAT||ETP": {
+          "217": 1
+        },
+        "1CAP2||1CAP2 Mode Vêtement Flou||ETP": {
+          "217": 7,
+          "234": 4.5
+        },
         "1CAP2||1CAP2 Mode Vêtement Flou||Co-FR-ETP": {
           "234": 1.5
         },
         "1CAP2||1CAP2 Mode Vêtement Flou||Co-MATHS-ETP": {
+          "234": 1.5
+        },
+        "1CAP2||1CAP2 Mode Vêtement Flou||Chef Œuvre Pro": {
           "234": 1.5
         },
         "1CAP2||1CAP2 Mode Vêtement Tailleur||ETP": {
@@ -15334,6 +14990,9 @@
         },
         "1CAP2||1CAP2 Mode Vêtement Tailleur||Chef Œuvre Pro": {
           "268": 1.5
+        },
+        "TCAP2||TCAP2 AFAT||ETP": {
+          "234": 1
         },
         "TCAP2||TCAP2 Mode Vêtement Flou||ETP": {
           "261": 12
@@ -15347,12 +15006,22 @@
         "TCAP2||TCAP2 Mode Vêtement Flou||Chef Œuvre Pro": {
           "261": 1.5
         },
+        "TCAP2||TCAP2 Mode Vêtement Tailleur||ETP": {
+          "234": 7,
+          "268": 5
+        },
         "TCAP2||TCAP2 Mode Vêtement Tailleur||Chef Œuvre Pro": {
           "268": 1.5
         },
         "2BP||2BP MCC||ETP": {
-          "234": 5,
+          "217": 5,
           "251": 7
+        },
+        "2BP||2BP MCC||Co-FR-ETP": {
+          "217": 0.5
+        },
+        "2BP||2BP MCC||Co-MATHS-ETP": {
+          "217": 0.5
         },
         "1BP||1BP MCC||ETP": {
           "201": 10.5
@@ -15378,34 +15047,11 @@
         },
         "CS||CS Essayage Vente et retouche||ETP": {
           "201": 8,
-          "234": 2,
-          "251": 5
-        },
-        "1CAP2||1CAP2 Mode Vêtement Flou||ETP": {
-          "217": 5.5,
-          "234": 6
-        },
-        "1CAP2||1CAP2 Mode Vêtement Flou||Chef Œuvre Pro": {
-          "217": 1.5
-        },
-        "TCAP2||TCAP2 AFAT||ETP": {
-          "217": 1
-        },
-        "TCAP2||TCAP2 Mode Vêtement Tailleur||ETP": {
-          "217": 6,
-          "268": 6
-        },
-        "1CAP2||1CAP2 AFAT||ETP": {
-          "234": 1
-        },
-        "2BP||2BP MCC||Co-FR-ETP": {
-          "234": 0.5
-        },
-        "2BP||2BP MCC||Co-MATHS-ETP": {
-          "234": 0.5
+          "251": 5,
+          "268": 2
         },
         "Autre||3EME PREPA METIER||3PM": {
-          "268": 1
+          "234": 1
         }
       },
       "P7200": {
@@ -15544,244 +15190,7 @@
           "229": 1.5
         }
       },
-      "P6500": {},
-      "P8510": {
-        "1CAP2||1CAP2 AFAT||ETP": {
-          "200": 3
-        },
-        "TCAP2||TCAP2 AFAT||ETP": {
-          "200": 3
-        },
-        "2BP||2BP ALIM||ETP": {
-          "200": 4,
-          "247": 4
-        },
-        "1BP||1BP BOU||ETP": {
-          "200": 3
-        },
-        "1BP||1BP POI||ETP": {
-          "247": 3
-        },
-        "TBP||TBP BOU||ETP": {
-          "200": 3
-        },
-        "TBP||TBP POI||ETP": {
-          "247": 3
-        },
-        "Autre||3EME PREPA METIER||3PM": {
-          "200": 1
-        },
-        "2BP||2BP ALIM||Sciences": {
-          "247": 3
-        },
-        "2BP||2BP ALIM||Co-FR-ETP": {
-          "247": 1
-        },
-        "2BP||2BP ALIM||Co-MATHS-ETP": {
-          "247": 1
-        },
-        "2BP||2BP ALIM||Parcours": {
-          "247": 1
-        },
-        "TBP||TBP POI||Parcours": {
-          "247": 1.5
-        },
-        "1BP||1BP BOU||Co-FR-ETP": {
-          "200": 0.5
-        },
-        "1BP||1BP BOU||Co-MATHS-ETP": {
-          "200": 0.5
-        },
-        "1BP||1BP POI||Parcours": {
-          "200": 1
-        },
-        "1BP||1BP POI||Co-FR-ETP": {
-          "247": 0.5
-        },
-        "1BP||1BP POI||Co-MATHS-ETP": {
-          "247": 0.5
-        },
-        "TBP||TBP BOU||Sciences": {
-          "200": 1.5
-        },
-        "TBP||TBP POI||Sciences": {
-          "247": 1.5
-        }
-      },
-      "P8518": {
-        "1CAP2||1CAP2 POI||ETP": {
-          "210": 8.5,
-          "225": 3
-        },
-        "1CAP2||1CAP2 POI||Chef Œuvre Pro": {
-          "210": 1.5
-        },
-        "TCAP2||TCAP2 POI||ETP": {
-          "225": 3.5,
-          "248": 8.5
-        },
-        "TCAP2||TCAP2 POI||Chef Œuvre Pro": {
-          "248": 1.5
-        },
-        "2BP||2BP ALIM||ETP": {
-          "210": 8
-        },
-        "1BP||1BP POI||Projet": {
-          "225": 1.5
-        },
-        "1BP||1BP POI||ETP": {
-          "225": 4.5,
-          "248": 3
-        },
-        "TBP||TBP POI||ETP": {
-          "225": 3,
-          "248": 4.5
-        },
-        "TBP||TBP POI||Projet": {
-          "248": 1
-        },
-        "CS||CS Organisateurs de Réception||ETP": {
-          "225": 5
-        },
-        "1BP||1BP POI||Sciences": {
-          "248": 1.5
-        }
-      },
-      "P8515": {
-        "TBP||TBP BOU||ETP": {
-          "216": 7.5
-        },
-        "TBP||TBP BOU||Projet": {
-          "216": 1
-        },
-        "1BP||1BP BOU||Sciences": {
-          "249": 1.5
-        },
-        "1BP||1BP BOU||ETP": {
-          "249": 7.5
-        },
-        "1BP||1BP BOU||Projet": {
-          "249": 1.5
-        },
-        "2BP||2BP ALIM||ETP": {
-          "221": 8
-        },
-        "1CAP2||1CAP2 BOU||ETP": {
-          "221": 6,
-          "249": 5.5
-        },
-        "1CAP2||1CAP2 BOU||SST": {
-          "249": 0.5
-        },
-        "1CAP2||1CAP2 POI||SST": {
-          "249": 0.5
-        },
-        "1CAP2||1CAP2 BOU||Co-FR-ETP": {
-          "249": 1.5
-        },
-        "1CAP2||1CAP2 BOU||Chef Œuvre Pro": {
-          "221": 1.5
-        },
-        "1CAP2||1CAP2 BOU||Co-MATHS-ETP": {
-          "249": 1.5
-        },
-        "TCAP2||TCAP2 BOU||ETP": {
-          "216": 8,
-          "221": 4
-        },
-        "TCAP2||TCAP2 BOU||Co-MATHS-ETP": {
-          "216": 1.5
-        },
-        "TCAP2||TCAP2 BOU||Chef Œuvre Pro": {
-          "216": 1.5
-        },
-        "TCAP2||TCAP2 BOU||Co-FR-ETP": {
-          "216": 1.5
-        }
-      },
-      "L0426": {
-        "2BP||2BP MRC||ESP": {
-          "272": 6
-        },
-        "1BP||1BP Métiers Commerce et Vente||ESP": {
-          "272": 3
-        },
-        "1BP||1BP Métiers de l'Accueil||ESP": {
-          "272": 3
-        },
-        "TBP||TBP Métiers Commerce et Vente||ESP": {
-          "272": 3
-        },
-        "TBP||TBP Métiers de l'Accueil||ESP": {
-          "272": 3
-        }
-      },
-      "L1900": {
-        "TCAP2||TCAP2 AFAT||EPS": {
-          "208": 3
-        },
-        "TBP||TBP POI||EPS": {
-          "208": 3
-        },
-        "TCAP2||TCAP2 BOU||EPS": {
-          "208": 3
-        },
-        "2BP||2BP ALIM||EPS": {
-          "208": 2.5
-        },
-        "1BP||1BP Métiers Commerce et Vente||EPS": {
-          "208": 2.5
-        },
-        "1BP||1BP MCC||EPS": {
-          "208": 2.5
-        },
-        "1CAP2||1CAP2 BOU||EPS": {
-          "274": 2
-        },
-        "1CAP2||1CAP2 EPC1||EPS": {
-          "274": 2
-        },
-        "2BP||2BP MRC||EPS": {
-          "240": 2.5,
-          "274": 2.5
-        },
-        "TCAP2||TCAP2 EPC1||EPS": {
-          "274": 3
-        },
-        "TBP||TBP MCC||EPS": {
-          "274": 3
-        },
-        "1BP||1BP POI||EPS": {
-          "240": 2.5
-        },
-        "TBP||TBP Métiers de l'Accueil||EPS": {
-          "240": 3
-        },
-        "TBP||TBP Métiers Commerce et Vente||EPS": {
-          "240": 3
-        },
-        "1CAP2||1CAP2 AFAT||EPS": {
-          "231": 2
-        },
-        "1CAP2||1CAP2 Mode Vêtement Flou||EPS": {
-          "231": 2
-        },
-        "TCAP2||TCAP2 Mode Vêtement Flou||EPS": {
-          "231": 3
-        },
-        "2BP||2BP MET||EPS": {
-          "231": 2.5
-        },
-        "1BP||1BP Métiers de l'Accueil||EPS": {
-          "231": 2.5
-        },
-        "Autre||UNSS||NV": {
-          "208": 3,
-          "231": 3,
-          "240": 3
-        }
-      },
-      "P1315": {}
+      "P6500": {}
     },
     "params": {
       "annee": "2026-2027",
@@ -15792,7 +15201,7 @@
       "pptxTitre": "Répartition de la Dotation Horaire Globale"
     },
     "nextClassId": 112,
-    "nextProfId": 275,
+    "nextProfId": 274,
     "_seedTS": 0
   }
 }
