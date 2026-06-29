@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T21:12:35.136Z",
+  "date": "2026-06-29T21:13:01.597Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -14787,7 +14787,8 @@
       "P8013": {
         "1BP||1BP Métiers Commerce et Vente||Eco-Droit": {
           "215": 0,
-          "219": 0
+          "219": 0,
+          "270": 1
         },
         "1CAP2||1CAP2 AFAT||Co-FR-ETP": {
           "203": 0,
