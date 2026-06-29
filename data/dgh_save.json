@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T21:00:59.282Z",
+  "date": "2026-06-29T21:02:04.743Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -14826,7 +14826,8 @@
         },
         "TBP||TBP Métiers de l'Accueil||Projet": {
           "211": 0,
-          "228": 2
+          "228": 1,
+          "243": 1
         },
         "1CAP2||1CAP2 TOUR||ETP": {
           "215": 4,
@@ -14999,6 +15000,9 @@
         },
         "1CAP2||1CAP2 EPC1||Chef Œuvre Pro": {
           "228": 1.5
+        },
+        "1CAP2||1CAP EPC2||ETP": {
+          "235": 6
         }
       },
       "P2200": {
