@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-29T11:46:58.893Z",
+  "date": "2026-06-29T11:47:30.248Z",
   "params": {
     "etablissement": "Lycée Polyvalent Léopold Elfort",
     "ville": "Mana",
@@ -15373,7 +15373,8 @@
         },
         "CS||CS Essayage Vente et retouche||ETP": {
           "201": 8,
-          "234": 2
+          "234": 2,
+          "251": 5
         },
         "1CAP2||1CAP2 Mode Vêtement Flou||ETP": {
           "217": 5.5,
