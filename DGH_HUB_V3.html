@@ -548,9 +548,6 @@ function setGithubSyncMeta(date) {
 // locales existe (et plus récente que notre dernière synchro), on la
 // charge automatiquement avant de lancer les espaces LGT/SEP.
 function autoSyncOnStartup(done) {
-  var token = getGithubToken();
-  if(!token) { done(); return; }
-
   // Première exécution de la synchro auto sur cet appareil : si des
   // données locales existent déjà mais qu'aucune référence de synchro
   // n'a encore été établie, on considère ces données locales comme la
@@ -564,8 +561,11 @@ function autoSyncOnStartup(done) {
     return;
   }
 
+  // La lecture d'un dépôt public ne nécessite pas de token.
+  var token = getGithubToken();
   var url = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH+'?ref='+GH_BRANCH+'&t='+Date.now();
-  var headers = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json'};
+  var headers = {'Accept':'application/vnd.github+json'};
+  if(token) headers['Authorization'] = 'token '+token;
   var finished = false;
   function finish(){ if(finished) return; finished = true; done(); }
   setTimeout(finish, 6000); // ne jamais bloquer le démarrage plus de 6s
@@ -624,13 +624,13 @@ function saveAllDataToGithub() {
 }
 
 function loadAllDataFromGithub() {
-  var token = getGithubToken();
-  if(!token) { showHubToast('Renseignez d\'abord un token GitHub ci-dessus.'); return; }
   if(!confirm('Charger la sauvegarde GitHub va remplacer les données locales (LGT et SEP) sur cet appareil.\n\nContinuer ?')) return;
-  var url = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH+'?ref='+GH_BRANCH;
-  var headers = {'Authorization':'token '+token, 'Accept':'application/vnd.github+json'};
+  var token = getGithubToken();
+  var url = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH+'?ref='+GH_BRANCH+'&t='+Date.now();
+  var headers = {'Accept':'application/vnd.github+json'};
+  if(token) headers['Authorization'] = 'token '+token;
   showHubToast('Chargement depuis GitHub…');
-  fetch(url, {headers:headers})
+  fetch(url, {headers:headers, cache:'no-store'})
     .then(function(r){
       if(!r.ok) throw new Error(r.status===404 ? 'Aucune sauvegarde trouvée sur GitHub.' : (r.status+' '+r.statusText));
       return r.json();
