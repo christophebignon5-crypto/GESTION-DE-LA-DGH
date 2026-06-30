@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T12:01:12.872Z",
+  "date": "2026-06-30T12:02:21.903Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4090,7 +4090,7 @@
           "hgr": 0,
           "nbCl": 1,
           "nbGr": 0,
-          "disc1": "L8013",
+          "disc1": "L8012",
           "h1": 9,
           "disc2": "—",
           "h2": 0,
@@ -4704,6 +4704,9 @@
         },
         "2BTS GTLA||Pérennisation et développement de l’activité de transport et de prestations logistiques||1": {
           "224": 1
+        },
+        "2BTS GTLA||Conception||9": {
+          "224": 9
         }
       }
     },
