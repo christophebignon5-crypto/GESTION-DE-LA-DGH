@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:33:15.195Z",
+  "date": "2026-06-30T15:37:23.260Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -15042,14 +15042,14 @@
         "CS||CS Organisateurs de Réception||Comm.": {
           "207": 3
         },
-        "CS||CS Organisateurs de Réception||ANG": {
-          "212": 3
-        },
         "1BP||1BP Métiers de l\\'Accueil||ANG": {
           "227": 4
         },
         "TBP||TBP Métiers de l\\'Accueil||ANG": {
           "207": 5
+        },
+        "CS||CS Organisateurs de Réception||ANG": {
+          "207": 3
         }
       },
       "P8013": {
@@ -15603,7 +15603,8 @@
         "TBP||TBP Métiers de l'Accueil||PORT": {
           "236": 1.5
         }
-      }
+      },
+      "P8518": {}
     },
     "params": {
       "annee": "2026-2027",
