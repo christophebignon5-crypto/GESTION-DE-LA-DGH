@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T18:42:07.674Z",
+  "date": "2026-06-30T18:43:01.237Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -3768,7 +3768,7 @@
           "hgr": 0,
           "nbCl": 1,
           "nbGr": 0,
-          "disc1": "L8031",
+          "disc1": "L8012",
           "h1": 2,
           "disc2": "—",
           "h2": 0,
@@ -4578,9 +4578,7 @@
         "1BTS CI||Culture éco, Juri. et Managé.||4": {
           "228": 4
         },
-        "1BTS GTLA||Culture économique, juridique et managériale appliquée au transport et aux prestations logistiques||2": {
-          "228": 2
-        }
+        "1BTS GTLA||Culture économique, juridique et managériale appliquée au transport et aux prestations logistiques||2": {}
       },
       "L0100": {
         "1G1||Humanités, Litt. et Philo||4": {
@@ -4717,6 +4715,9 @@
         },
         "1BTS GTLA||Pérennisation et développement de l’activité de transport et de prestations logistiques||2": {
           "205": 2
+        },
+        "1BTS GTLA||Culture économique, juridique et managériale appliquée au transport et aux prestations logistiques||2": {
+          "224": 2
         }
       },
       "L1900": {
