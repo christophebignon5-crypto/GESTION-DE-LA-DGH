@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:25:48.117Z",
+  "date": "2026-06-30T15:26:51.398Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -15511,7 +15511,30 @@
           "229": 1.5
         }
       },
-      "P6500": {}
+      "P6500": {},
+      "L1900": {
+        "1BP||1BP MCC||EPS": {
+          "208": 2.5
+        },
+        "1BP||1BP Métiers Commerce et Vente||EPS": {
+          "208": 2.5
+        },
+        "2BP||2BP ALIM||EPS": {
+          "208": 2.5
+        },
+        "TBP||TBP POI||EPS": {
+          "208": 3
+        },
+        "TCAP2||TCAP2 AFAT||EPS": {
+          "208": 3
+        },
+        "TCAP2||TCAP2 BOU||EPS": {
+          "208": 3
+        },
+        "Autre||UNSS||NV": {
+          "208": 9
+        }
+      }
     },
     "params": {
       "annee": "2026-2027",
