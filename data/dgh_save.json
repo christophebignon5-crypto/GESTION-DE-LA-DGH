@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:28:34.372Z",
+  "date": "2026-06-30T15:29:24.203Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -5958,6 +5958,20 @@
         "bmp": false,
         "bmpQuotite": 0,
         "id": 273
+      },
+      {
+        "nom": "WITTENS",
+        "prenom": "YORIS",
+        "discipline": "L1900",
+        "discAutre": "",
+        "mat": "L1900",
+        "quotite": 12.5,
+        "csd": 0,
+        "decharge": 0,
+        "dechargeType": "",
+        "bmp": false,
+        "bmpQuotite": 0,
+        "id": 274
       }
     ],
     "ventilation": {
@@ -15555,13 +15569,26 @@
           "240": 2.5
         },
         "2BP||2BP MRC||EPS": {
-          "240": 2.5
+          "240": 2.5,
+          "274": 2.5
         },
         "TBP||TBP Métiers Commerce et Vente||EPS": {
           "240": 3
         },
         "TBP||TBP Métiers de l'Accueil||EPS": {
           "240": 3
+        },
+        "1CAP2||1CAP2 BOU||EPS": {
+          "274": 2
+        },
+        "1CAP2||1CAP2 EPC1||EPS": {
+          "274": 2
+        },
+        "TCAP2||TCAP2 EPC1||EPS": {
+          "274": 3
+        },
+        "TBP||TBP MCC||EPS": {
+          "274": 3
         }
       }
     },
@@ -15574,7 +15601,7 @@
       "pptxTitre": "Répartition de la Dotation Horaire Globale"
     },
     "nextClassId": 112,
-    "nextProfId": 274,
+    "nextProfId": 275,
     "_seedTS": 0
   }
 }
