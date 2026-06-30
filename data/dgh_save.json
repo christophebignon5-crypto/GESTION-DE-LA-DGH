@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T01:07:57.731Z",
+  "date": "2026-06-30T02:04:25.877Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4486,10 +4486,10 @@
           "229": 3
         },
         "TG1||Anglais A||2": {
-          "240": 2
+          "221": 2
         },
         "TG2||Anglais A||2": {
-          "221": 2
+          "240": 2
         },
         "1BTS CI||Anglais A||4": {
           "221": 4
@@ -4618,8 +4618,7 @@
         }
       }
     },
-    "repCollapsed": {},
-    "ventMatrixCollapsed": {}
+    "repCollapsed": {}
   },
   "sep_state": {
     "dgh": {
