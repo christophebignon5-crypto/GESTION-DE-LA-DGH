@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:31:12.009Z",
+  "date": "2026-06-30T15:31:58.247Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -5517,12 +5517,13 @@
         "prenom": "ERWAN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 20,
+        "quotite": 14,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": ""
       },
       {
         "id": 232,
@@ -5966,7 +5967,7 @@
         "discipline": "L1900",
         "discAutre": "",
         "mat": "L1900",
-        "quotite": 12.5,
+        "quotite": 11,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
