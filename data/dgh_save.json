@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T01:01:46.799Z",
+  "date": "2026-06-30T01:02:45.030Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4568,6 +4568,17 @@
         },
         "1BTS CI||Portugais||4": {
           "219": 4
+        }
+      },
+      "AUTRE_CAV": {
+        "2GT1||Cinéma Audiovisuel||3": {
+          "241": 3
+        },
+        "1G1||Cinéma Audiovisuel||3": {
+          "241": 3
+        },
+        "TG1||Cinéma Audiovisuel||3": {
+          "241": 3
         }
       }
     },
