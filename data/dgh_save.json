@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T10:21:13.813Z",
+  "date": "2026-06-30T11:51:55.368Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -259,8 +259,8 @@
       },
       {
         "id": 207,
-        "nom": "FERRANDEZ",
-        "prenom": "JEAN-PAUL",
+        "nom": "MOUTOUSSAMY",
+        "prenom": "STELIA",
         "discipline": "L8013",
         "mat": "L8013",
         "quotite": 18,
@@ -268,7 +268,11 @@
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": "",
+        "niveauTerminal": false,
+        "niveauBTS": false,
+        "ors": 18
       },
       {
         "id": 208,
@@ -4651,6 +4655,47 @@
         },
         "2GT4||Français||5": {
           "225": 5
+        }
+      },
+      "L0426": {
+        "2GT2||Espagnol 2||3": {
+          "204": 3
+        },
+        "2GT1||Espagnol 2||3": {
+          "204": 3
+        },
+        "2GT3||Espagnol 2||3": {
+          "210": 3
+        },
+        "2GT4||Espagnol 2||3": {
+          "210": 3
+        },
+        "1G1||Espagnol B||2": {
+          "204": 2
+        },
+        "TG1||Espagnol B||2": {
+          "204": 2
+        },
+        "TSTMG||Espagnol 2||4": {
+          "204": 4
+        },
+        "1BTS CI||Espagnol||4": {
+          "204": 4
+        },
+        "1G1||LLCE Espagnol||4": {
+          "210": 4
+        },
+        "1G2||Espagnol B||2": {
+          "210": 2
+        },
+        "1STMG||Espagnol 2||2": {
+          "210": 2
+        },
+        "TG2||Espagnol B||2": {
+          "210": 2
+        },
+        "2BTS CI||Espagnol||3": {
+          "210": 3
         }
       }
     },
