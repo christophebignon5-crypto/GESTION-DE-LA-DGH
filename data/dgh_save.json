@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T12:19:43.164Z",
+  "date": "2026-06-30T14:10:39.322Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -15032,8 +15032,7 @@
           "271": 1
         },
         "TBP||TBP Métiers de l'Accueil||Eco-Droit": {
-          "215": 0,
-          "243": 1.5
+          "215": 0
         },
         "TBP||TBP Métiers Commerce et Vente||Eco-Droit": {
           "211": 1.5,
@@ -15045,8 +15044,7 @@
         },
         "TBP||TBP Métiers de l'Accueil||Projet": {
           "211": 0,
-          "228": 1,
-          "243": 1
+          "228": 1
         },
         "1CAP2||1CAP2 TOUR||ETP": {
           "215": 4,
@@ -15156,18 +15154,14 @@
           "271": 1
         },
         "TBP||TBP Métiers de l'Accueil||ETP": {
-          "228": 10.5,
-          "243": 10.5
-        },
-        "TBP||TBP Métiers de l'Accueil||Parcours": {
-          "243": 1.5
+          "228": 10.5
         },
         "TCAP2||TCAP2 POI||ECO": {
           "243": 0.5
         },
         "CS||CS Organisateurs de Réception||Eco-Gest": {
-          "243": 3,
-          "245": 3
+          "245": 3,
+          "271": 3
         },
         "1BP||1BP Métiers Commerce et Vente||Co-FR-ETP": {
           "246": 0.5
