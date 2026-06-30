@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:43:16.867Z",
+  "date": "2026-06-30T15:43:30.622Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -15673,7 +15673,8 @@
         "1BP||1BP BOU||Projet": {
           "249": 1.5
         }
-      }
+      },
+      "P8510": {}
     },
     "params": {
       "annee": "2026-2027",
