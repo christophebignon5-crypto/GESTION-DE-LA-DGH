@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:50:02.036Z",
+  "date": "2026-06-30T15:51:34.111Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -15615,13 +15615,34 @@
           "210": 8
         },
         "1BP||1BP POI||ETP": {
-          "225": 4.5
+          "225": 4.5,
+          "248": 3
         },
         "1BP||1BP POI||Projet": {
           "225": 1.5
         },
         "CS||CS Organisateurs de Réception||ETP": {
           "225": 5
+        },
+        "TBP||TBP POI||ETP": {
+          "225": 3,
+          "248": 4.5
+        },
+        "TCAP2||TCAP2 POI||ETP": {
+          "225": 3.5,
+          "248": 8.5
+        },
+        "1BP||1BP POI||Sciences": {
+          "248": 1.5
+        },
+        "TBP||TBP POI||Sciences": {
+          "248": 1.5
+        },
+        "TBP||TBP POI||Projet": {
+          "248": 1
+        },
+        "TCAP2||TCAP2 POI||Chef Œuvre Pro": {
+          "248": 1.5
         }
       },
       "L0426": {
