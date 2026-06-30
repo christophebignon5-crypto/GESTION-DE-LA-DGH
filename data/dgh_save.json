@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T00:59:47.747Z",
+  "date": "2026-06-30T01:00:34.030Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -423,8 +423,8 @@
       },
       {
         "id": 221,
-        "nom": "MEULENHOF",
-        "prenom": "JANISHA",
+        "nom": "DE MOURA",
+        "prenom": "GEORGE",
         "discipline": "L0422",
         "mat": "L0422",
         "quotite": 18,
@@ -432,7 +432,11 @@
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": "",
+        "niveauTerminal": false,
+        "niveauBTS": false,
+        "ors": 18
       },
       {
         "id": 222,
