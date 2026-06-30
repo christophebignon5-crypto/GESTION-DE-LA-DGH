@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T01:00:45.498Z",
+  "date": "2026-06-30T01:01:19.547Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4551,6 +4551,20 @@
         },
         "TSTMG||Philosophie||4": {
           "211": 4
+        }
+      },
+      "L0433": {
+        "2GT1||Portugais 2||2.5": {
+          "219": 2.5
+        },
+        "1G1||Portugais B||2": {
+          "219": 2
+        },
+        "TG1||Portugais B||2": {
+          "219": 2
+        },
+        "1BTS CI||Portugais||4": {
+          "219": 4
         }
       }
     },
