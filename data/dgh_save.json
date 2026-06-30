@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T01:01:19.547Z",
+  "date": "2026-06-30T01:01:33.547Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4519,6 +4519,9 @@
         },
         "TG1||Physique-Chimie||6": {
           "230": 6
+        },
+        "2GT2||Sc. du numérique et tech.||2.5": {
+          "214": 2.5
         }
       },
       "L8031": {
