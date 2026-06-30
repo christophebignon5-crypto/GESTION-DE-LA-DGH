@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:29:32.172Z",
+  "date": "2026-06-30T15:31:12.009Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -5267,12 +5267,13 @@
         "prenom": "MARTIN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 20,
+        "quotite": 18.5,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": ""
       },
       {
         "id": 209,
