@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:31:58.247Z",
+  "date": "2026-06-30T15:33:15.195Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -15591,6 +15591,17 @@
         },
         "TBP||TBP MCC||EPS": {
           "274": 3
+        }
+      },
+      "L0433": {
+        "2BP||2BP MRC||PORT": {
+          "236": 1.5
+        },
+        "1BP||1BP Métiers de l'Accueil||PORT": {
+          "236": 1.5
+        },
+        "TBP||TBP Métiers de l'Accueil||PORT": {
+          "236": 1.5
         }
       }
     },
