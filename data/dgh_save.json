@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T00:49:46.471Z",
+  "date": "2026-06-30T00:59:47.747Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4434,16 +4434,55 @@
           "221": 6
         },
         "1G1||LLCE Anglais||4": {
-          "221": 4
+          "229": 4
         },
         "2BTS GTLA||Anglais A||3": {
-          "221": 3
+          "240": 3
         },
         "2BTS CI||RCI Anglais & Éco-gestion||2": {
-          "221": 2
+          "229": 2
         },
         "2BTS CI||Anglais A||3": {
+          "229": 3
+        },
+        "TG1||Anglais A||2": {
+          "240": 2
+        },
+        "TG2||Anglais A||2": {
+          "221": 2
+        },
+        "1BTS CI||Anglais A||4": {
+          "221": 4
+        },
+        "1BTS CI||RCI Anglais & Éco-gestion||1": {
+          "221": 1
+        },
+        "TSTMG||Anglais 1 (dont ETLV)||3": {
           "221": 3
+        },
+        "2GT1||Anglais 1||3": {
+          "240": 3
+        },
+        "2GT2||Anglais 1||3": {
+          "240": 3
+        },
+        "2GT3||Anglais 1||3": {
+          "240": 3
+        },
+        "2GT4||Anglais 1||3": {
+          "240": 3
+        },
+        "1G1||Anglais A||2.5": {
+          "229": 2.5
+        },
+        "1G2||Anglais A||2.5": {
+          "229": 2.5
+        },
+        "1STMG||Anglais 1 (dont ETLV)||3": {
+          "229": 3
+        },
+        "1BTS GTLA||Anglais A||3": {
+          "240": 3
         }
       },
       "L1500": {
@@ -4511,7 +4550,8 @@
         }
       }
     },
-    "repCollapsed": {}
+    "repCollapsed": {},
+    "ventMatrixCollapsed": {}
   },
   "sep_state": {
     "dgh": {
