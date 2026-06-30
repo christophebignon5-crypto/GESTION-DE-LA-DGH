@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T10:20:24.469Z",
+  "date": "2026-06-30T10:21:13.813Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4124,7 +4124,7 @@
           "hgr": 1,
           "nbCl": 1,
           "nbGr": 2,
-          "disc1": "L0202",
+          "disc1": "L0100",
           "h1": 5,
           "disc2": "—",
           "h2": 0,
@@ -4590,6 +4590,9 @@
         },
         "TSTMG||Philosophie||4": {
           "211": 4
+        },
+        "2GT1||Français||5": {
+          "211": 5
         }
       },
       "L0433": {
@@ -4639,9 +4642,7 @@
         "1G2||Français||4": {
           "225": 4
         },
-        "2GT1||Français||5": {
-          "225": 5
-        },
+        "2GT1||Français||5": {},
         "2GT2||Français||5": {
           "225": 5
         },
@@ -4653,7 +4654,8 @@
         }
       }
     },
-    "repCollapsed": {}
+    "repCollapsed": {},
+    "ventMatrixCollapsed": {}
   },
   "sep_state": {
     "dgh": {
