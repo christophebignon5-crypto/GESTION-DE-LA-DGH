@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T02:04:25.877Z",
+  "date": "2026-06-30T10:20:24.469Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4615,6 +4615,41 @@
         },
         "TG1||Cinéma Audiovisuel||3": {
           "241": 3
+        }
+      },
+      "L0202": {
+        "1BTS CI||Culture gén. et expression||2": {
+          "209": 2
+        },
+        "1BTS GTLA||Culture gén. et expression||2": {
+          "209": 2
+        },
+        "2BTS CI||Culture gén. et expression||2": {
+          "209": 2
+        },
+        "2BTS GTLA||Culture gén. et expression||2": {
+          "209": 2
+        },
+        "1G1||Français||4": {
+          "209": 4
+        },
+        "1STMG||Français||6": {
+          "209": 6
+        },
+        "1G2||Français||4": {
+          "225": 4
+        },
+        "2GT1||Français||5": {
+          "225": 5
+        },
+        "2GT2||Français||5": {
+          "225": 5
+        },
+        "2GT3||Français||5": {
+          "225": 5
+        },
+        "2GT4||Français||5": {
+          "225": 5
         }
       }
     },
