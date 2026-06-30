@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:41:07.228Z",
+  "date": "2026-06-30T15:43:16.867Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -15619,6 +15619,59 @@
         },
         "TBP||TBP Métiers de l'Accueil||ESP": {
           "272": 3
+        }
+      },
+      "P8515": {
+        "TBP||TBP BOU||ETP": {
+          "216": 7.5
+        },
+        "TBP||TBP BOU||Projet": {
+          "216": 1
+        },
+        "TCAP2||TCAP2 BOU||Co-MATHS-ETP": {
+          "216": 1.5
+        },
+        "TCAP2||TCAP2 BOU||Co-FR-ETP": {
+          "216": 1.5
+        },
+        "TCAP2||TCAP2 BOU||Chef Œuvre Pro": {
+          "216": 1.5
+        },
+        "TCAP2||TCAP2 BOU||ETP": {
+          "216": 8,
+          "221": 4
+        },
+        "1CAP2||1CAP2 BOU||Chef Œuvre Pro": {
+          "221": 1.5,
+          "249": 0
+        },
+        "1CAP2||1CAP2 BOU||ETP": {
+          "221": 6,
+          "249": 5.5
+        },
+        "2BP||2BP ALIM||ETP": {
+          "221": 8
+        },
+        "1CAP2||1CAP2 BOU||SST": {
+          "249": 0.5
+        },
+        "1CAP2||1CAP2 POI||SST": {
+          "249": 0.5
+        },
+        "1CAP2||1CAP2 BOU||Co-FR-ETP": {
+          "249": 1.5
+        },
+        "1CAP2||1CAP2 BOU||Co-MATHS-ETP": {
+          "249": 1.5
+        },
+        "1BP||1BP BOU||Sciences": {
+          "249": 1.5
+        },
+        "1BP||1BP BOU||ETP": {
+          "249": 7.5
+        },
+        "1BP||1BP BOU||Projet": {
+          "249": 1.5
         }
       }
     },
