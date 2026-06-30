@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T01:05:51.235Z",
+  "date": "2026-06-30T01:07:57.731Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -2159,9 +2159,9 @@
           "hcl": 0,
           "hgr": 4,
           "nbCl": 0,
-          "nbGr": 1,
-          "disc1": "L0100",
-          "h1": 4,
+          "nbGr": 0,
+          "disc1": "—",
+          "h1": 0,
           "disc2": "—",
           "h2": 0,
           "disc3": "—",
