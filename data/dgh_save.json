@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T15:52:36.256Z",
+  "date": "2026-06-30T15:54:10.812Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -13048,7 +13048,7 @@
           "hgr": 0,
           "nbCl": 1,
           "nbGr": 0,
-          "disc1": "P8518",
+          "disc1": "P8510",
           "h1": 1.5,
           "disc2": "—",
           "h2": 0,
@@ -15769,6 +15769,9 @@
           "247": 3
         },
         "TBP||TBP POI||Parcours": {
+          "247": 1.5
+        },
+        "TBP||TBP POI||Sciences": {
           "247": 1.5
         }
       }
