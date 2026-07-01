@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-07-01T10:52:50.658Z",
+  "date": "2026-07-01T10:53:52.454Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4807,12 +4807,23 @@
         "1BTS CI||Mobilité Internationale||1": {
           "202": 1
         },
-        "2BTS CI||Relation commerciale Intern.||2": {},
+        "2BTS CI||Relation commerciale Intern.||2": {
+          "203": 2
+        },
         "2BTS CI||RCI Anglais & Éco-gestion||2": {
           "202": 2
         },
         "2BTS CI||Développement commercial Int.||4": {
           "202": 4
+        },
+        "1BTS CI||Opérations internationales||5": {
+          "203": 5
+        },
+        "2BTS CI||Opérations internationales||6": {
+          "203": 6
+        },
+        "2BTS CI||ARID||1": {
+          "203": 1
         }
       }
     },
