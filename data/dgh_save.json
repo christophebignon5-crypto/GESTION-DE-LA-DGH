@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-07-01T10:50:27.292Z",
+  "date": "2026-07-01T10:51:49.976Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4792,6 +4792,11 @@
         },
         "UNSS||UNSS||3": {
           "231": 3
+        }
+      },
+      "L8013": {
+        "1BTS CI||Relation commerciale Intern.||3": {
+          "202": 3
         }
       }
     },
