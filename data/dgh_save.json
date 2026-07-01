@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-07-01T10:55:50.953Z",
+  "date": "2026-07-01T10:57:34.694Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -3570,7 +3570,7 @@
           "hgr": 4,
           "nbCl": 0,
           "nbGr": 1,
-          "disc1": "L8031",
+          "disc1": "L8013",
           "h1": 4,
           "disc2": "—",
           "h2": 0,
@@ -4832,6 +4832,12 @@
         },
         "2BTS CI||ARID||1": {
           "203": 1
+        },
+        "1BTS CI||Culture éco, Juri. et Managé.||4": {
+          "206": 4
+        },
+        "2BTS GTLA||Mise en œuvre d’opérations de transport et de prestations||2": {
+          "206": 2
         }
       }
     },
