@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-07-01T10:53:52.454Z",
+  "date": "2026-07-01T10:55:50.953Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -207,7 +207,11 @@
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": "",
+        "niveauTerminal": false,
+        "niveauBTS": true,
+        "ors": 18
       },
       {
         "id": 203,
@@ -220,7 +224,11 @@
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": "",
+        "niveauTerminal": false,
+        "niveauBTS": true,
+        "ors": 18
       },
       {
         "id": 204,
