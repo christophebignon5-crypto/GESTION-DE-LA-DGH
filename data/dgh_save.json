@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-06-30T18:43:01.237Z",
+  "date": "2026-07-01T10:33:20.353Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -185,12 +185,16 @@
         "prenom": "MARTIN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 20,
+        "quotite": 2,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": "",
+        "niveauTerminal": false,
+        "niveauBTS": false,
+        "ors": 18
       },
       {
         "id": 202,
@@ -371,7 +375,7 @@
         "prenom": "ERWAN",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 18,
+        "quotite": 6,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
@@ -461,12 +465,16 @@
         "prenom": "CINDY",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 20,
+        "quotite": 6,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": "",
+        "niveauTerminal": false,
+        "niveauBTS": false,
+        "ors": 18
       },
       {
         "id": 224,
@@ -565,12 +573,16 @@
         "prenom": "Yoris",
         "discipline": "L1900",
         "mat": "L1900",
-        "quotite": 20,
+        "quotite": 9,
         "csd": 0,
         "decharge": 0,
         "dechargeType": "",
         "bmp": false,
-        "bmpQuotite": 0
+        "bmpQuotite": 0,
+        "discAutre": "",
+        "niveauTerminal": false,
+        "niveauBTS": false,
+        "ors": 18
       },
       {
         "id": 236,
