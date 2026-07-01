@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-07-01T10:47:20.434Z",
+  "date": "2026-07-01T10:49:20.580Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4745,6 +4745,18 @@
         },
         "TSTMG||Droit et économie||6": {
           "205": 6
+        },
+        "TSTMG||Management||6": {
+          "226": 6
+        },
+        "TSTMG||ETLV (Éco-Gestion)||1": {
+          "226": 1
+        },
+        "1STMG||Sciences de gestion et num.||10": {
+          "226": 10
+        },
+        "2GT1||Sc. du numérique et tech.||2.5": {
+          "226": 2.5
         }
       },
       "L1900": {
