@@ -1,6 +1,6 @@
 {
   "version": "3.5",
-  "date": "2026-07-01T10:57:34.694Z",
+  "date": "2026-07-01T10:58:06.657Z",
   "params": {
     "annee": "2026-2027",
     "etablissement": "Lycée Polyvalent Léopold Elfort",
@@ -4838,6 +4838,15 @@
         },
         "2BTS GTLA||Mise en œuvre d’opérations de transport et de prestations||2": {
           "206": 2
+        },
+        "TSTMG||Mercatique (spé)||4": {
+          "206": 4
+        },
+        "1STMG||Management||5": {
+          "206": 5
+        },
+        "1STMG||ETLV (Éco-Gestion)||1": {
+          "206": 1
         }
       }
     },
