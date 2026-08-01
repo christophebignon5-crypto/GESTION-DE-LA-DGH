@@ -803,15 +803,12 @@ window.addEventListener('DOMContentLoaded', function() {
   applyHubParams();
   var loader = document.getElementById('hub-loader');
   var loaderText = loader ? loader.querySelector('.loader-text') : null;
-  if(loaderText) loaderText.textContent = 'Synchronisation…';
-  (function(){
-    applyHubParams();
-    var lf = document.getElementById('lgt-frame');
-    var sf = document.getElementById('sep-frame');
-    if(typeof LGT_SRC!=='undefined'&&lf) lf.srcdoc = LGT_SRC;
-    if(typeof SEP_SRC!=='undefined'&&sf) sf.srcdoc = SEP_SRC;
-    setTimeout(function(){ if(loader) loader.classList.add('hidden'); }, 300);
-  });
+  applyHubParams();
+  var lf = document.getElementById('lgt-frame');
+  var sf = document.getElementById('sep-frame');
+  if(typeof LGT_SRC!=='undefined'&&lf) lf.srcdoc = LGT_SRC;
+  if(typeof SEP_SRC!=='undefined'&&sf) sf.srcdoc = SEP_SRC;
+  setTimeout(function(){ if(loader) loader.classList.add('hidden'); }, 300);
 });
 </script>
 
