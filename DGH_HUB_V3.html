@@ -6,9 +6,6 @@
 <title>Gestion de la DGH — Lycée Léopold Elfort · Mana</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 
 /* ═══ HUB PORTAL ═══════════════════════════════════════════ */
@@ -346,7 +343,7 @@ body::after{
     </div><!-- /hub-cards -->
 
     <div class="hub-footer">
-      <span><i class="fa-solid fa-shield-halved" style="margin-right:5px;color:rgba(201,144,42,.5);"></i>Données locales · Sauvegarde chiffrée Firebase</span>
+      <span><i class="fa-solid fa-shield-halved" style="margin-right:5px;color:rgba(201,144,42,.5);"></i>Données stockées localement · Aucune transmission réseau</span>
       <span>v3.5 · Gestion de la DGH · Lycée Elfort</span>
     </div>
 
@@ -402,7 +399,6 @@ function openHubParams() {
   document.getElementById('hp-academie').value = p.academie;
   document.getElementById('hp-annee').value    = p.annee;
   document.getElementById('hub-params-modal').classList.add('open');
-  updateFirebaseUI();
   setTimeout(function(){ document.getElementById('hp-etab').focus(); }, 100);
 }
 function closeHubParams() {
@@ -478,67 +474,6 @@ function loadAllData(event) {
   reader.readAsText(file); event.target.value = '';
 }
 
-// ════════════════════════════════════════════════════════
-// Sauvegarde Cloud (Firebase Firestore + Google Auth)
-// ════════════════════════════════════════════════════════
-var FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDzNzxUHdu5fhGUnW4tYHAxBZ2dqJP_918",
-  authDomain: "gestion-dgh.firebaseapp.com",
-  projectId: "gestion-dgh",
-  storageBucket: "gestion-dgh.firebasestorage.app",
-  messagingSenderId: "146055505015",
-  appId: "1:146055505015:web:c911e790b88e101c86d272"
-};
-var FB_SYNC_KEY = 'dgh_firebase_sync_date';
-var _db = null, _auth = null, _currentUser = null;
-
-try {
-  firebase.initializeApp(FIREBASE_CONFIG);
-  _db   = firebase.firestore();
-  _auth = firebase.auth();
-  _auth.onAuthStateChanged(function(user) {
-    _currentUser = user;
-    updateFirebaseUI();
-  });
-} catch(e) { console.warn('Firebase init error:', e); }
-
-function getFirestoreDoc() {
-  if(!_db || !_currentUser) return null;
-  return _db.collection('dgh_backups').doc(_currentUser.uid);
-}
-
-function signInWithGoogle() {
-  if(!_auth) return;
-  var provider = new firebase.auth.GoogleAuthProvider();
-  _auth.signInWithPopup(provider)
-    .then(function(r){ showHubToast('Connecté : ' + r.user.email); })
-    .catch(function(e){ showHubToast('Erreur connexion : ' + e.message); });
-}
-
-function signOutFirebase() {
-  if(!_auth) return;
-  _auth.signOut().then(function(){ showHubToast('Déconnecté de Firebase.'); });
-}
-
-function updateFirebaseUI() {
-  var statusEl   = document.getElementById('fb-auth-status');
-  var signinBtn  = document.getElementById('fb-signin-btn');
-  var signoutBtn = document.getElementById('fb-signout-btn');
-  var syncBtns   = document.getElementById('fb-sync-btns');
-  if(!statusEl) return;
-  if(_currentUser) {
-    statusEl.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#4ade80;margin-right:5px;"></i>' + _currentUser.email;
-    if(signinBtn)  signinBtn.style.display  = 'none';
-    if(signoutBtn) signoutBtn.style.display = 'block';
-    if(syncBtns)   syncBtns.style.display   = 'flex';
-  } else {
-    statusEl.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:rgba(255,255,255,.3);margin-right:5px;"></i>Non connecté';
-    if(signinBtn)  signinBtn.style.display  = 'block';
-    if(signoutBtn) signoutBtn.style.display = 'none';
-    if(syncBtns)   syncBtns.style.display   = 'none';
-  }
-}
-
 function buildBackupObject() {
   var p = getHubParams();
   var b = {version:'3.5', date:new Date().toISOString(), params:p, lgt_state:null, sep_state:null};
@@ -554,72 +489,11 @@ function applyBackupObject(b) {
   if(b.params)    localStorage.setItem(HUB_KEY,         JSON.stringify(b.params));
   if(b.lgt_state) localStorage.setItem('dgh_lgt_state', JSON.stringify(b.lgt_state));
   if(b.sep_state) localStorage.setItem('dgh_sep_state', JSON.stringify(b.sep_state));
-  if(b.date) { try{ localStorage.setItem(FB_SYNC_KEY, b.date); }catch(e){} }
   ['lgt','sep'].forEach(function(id) {
     var fr = document.getElementById(id+'-frame');
     if(fr) { fr._loaded = false; fr.srcdoc = ''; }
   });
   applyHubParams();
-}
-
-function saveToFirebase(silent) {
-  if(!_currentUser) {
-    if(!silent) showHubToast('Connectez-vous d\'abord à Firebase (⚙ Paramètres).');
-    return Promise.resolve();
-  }
-  var b = buildBackupObject();
-  var docRef = getFirestoreDoc();
-  if(!silent) showHubToast('Sauvegarde Firebase en cours…');
-  return docRef.set(b)
-    .then(function(){
-      try{ localStorage.setItem(FB_SYNC_KEY, b.date); }catch(e){}
-      showHubToast(silent ? 'Synchronisé avec Firebase.' : 'Sauvegarde envoyée sur Firebase avec succès.');
-    })
-    .catch(function(err){ showHubToast('Erreur Firebase : ' + err.message); return Promise.reject(err); });
-}
-
-function loadFromFirebase() {
-  if(!_currentUser) { showHubToast('Connectez-vous d\'abord à Firebase (⚙ Paramètres).'); return; }
-  if(!confirm('Charger la sauvegarde Firebase va remplacer les données locales (LGT et SEP).\n\nContinuer ?')) return;
-  var docRef = getFirestoreDoc();
-  showHubToast('Chargement depuis Firebase…');
-  docRef.get()
-    .then(function(doc){
-      if(!doc.exists) throw new Error('Aucune sauvegarde trouvée sur Firebase.');
-      applyBackupObject(doc.data());
-      closeHubParams();
-      showHubToast('Sauvegarde Firebase chargée. Relancez l\'espace voulu.');
-    })
-    .catch(function(err){ showHubToast('Erreur Firebase : ' + err.message); });
-}
-
-function autoSyncWithFirebase(done) {
-  if(!_auth || !_db) { done(); return; }
-  var finished = false;
-  function finish(){ if(finished) return; finished = true; done(); }
-  setTimeout(finish, 6000);
-  var unsubscribe = _auth.onAuthStateChanged(function(user) {
-    unsubscribe();
-    if(!user) { finish(); return; }
-    _db.collection('dgh_backups').doc(user.uid).get()
-      .then(function(doc){
-        if(!doc.exists) { finish(); return; }
-        var b = doc.data();
-        var remoteDate   = b.date || '';
-        var localSyncDate = localStorage.getItem(FB_SYNC_KEY) || '';
-        var hasLocalData = !!(localStorage.getItem('dgh_lgt_state') || localStorage.getItem('dgh_sep_state'));
-        if(hasLocalData && !localSyncDate) {
-          try{ localStorage.setItem(FB_SYNC_KEY, new Date().toISOString()); }catch(e){}
-          finish(); return;
-        }
-        if(remoteDate && remoteDate > localSyncDate) {
-          applyBackupObject(b);
-          showHubToast('Données synchronisées depuis Firebase.');
-        }
-        finish();
-      })
-      .catch(function(){ finish(); });
-  });
 }
 
 function showHubToast(msg) {
@@ -930,7 +804,7 @@ window.addEventListener('DOMContentLoaded', function() {
   var loader = document.getElementById('hub-loader');
   var loaderText = loader ? loader.querySelector('.loader-text') : null;
   if(loaderText) loaderText.textContent = 'Synchronisation…';
-  autoSyncWithFirebase(function(){
+  (function(){
     applyHubParams();
     var lf = document.getElementById('lgt-frame');
     var sf = document.getElementById('sep-frame');
@@ -1876,7 +1750,6 @@ input.h-input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 2px 
       <label class="btn btn-sm" style="background:rgba(100,180,100,.85);color:#fff;border:none;cursor:pointer;" title="Importer les affectations d'une équipe disciplinaire"><i class="fa-solid fa-file-import"></i> Import équipe <input type="file" accept=".json" style="display:none" onchange="importEquipeFile(event)"></label>
       <button class="btn btn-sm" style="background:rgba(52,73,150,.9);color:#fff;border:none;font-weight:700;" onclick="generateEquipeFile()" title="Générer un fichier HTML autonome pour les équipes disciplinaires"><i class="fa-solid fa-share-nodes"></i> Générer fichier Équipe</button>
       <button class="btn btn-sm" style="background:#1a7a46;color:#fff;border:none;font-weight:700;" onclick="exportData()" title="Sauvegarder toutes les données (fichier JSON — clé USB, autre ordinateur)"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder tout</button>
-      <button class="btn btn-sm" style="background:#1a73e8;color:#fff;border:none;font-weight:700;" onclick="saveToFirebaseFromApp()" title="Envoyer la sauvegarde complète (LGT + SEP) vers Firebase"><i class="fa-solid fa-cloud-arrow-up"></i> Cloud</button>
       <button class="btn btn-sm" style="background:rgba(192,57,43,.85);color:#fff;border:none;" onclick="resetAllData()" title="Réinitialiser toutes les données"><i class="fa-solid fa-rotate-left"></i> Réinitialiser</button>
     </span>
     <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="printPage()"><i class="fa-solid fa-print"></i></button>
@@ -2681,15 +2554,8 @@ function initVentilation(){
 
 function saveState(){
   localStorage.setItem('dgh_lgt_state',JSON.stringify(state));
-  scheduleFirebaseAutoSync();
   const now=new Date();
   document.getElementById('last-save').textContent=\`Sauvegardé \${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}\`;
-}
-
-var _fbAutoSyncTimer=null;
-function scheduleFirebaseAutoSync(){
-  clearTimeout(_fbAutoSyncTimer);
-  _fbAutoSyncTimer=setTimeout(function(){ saveToFirebaseFromApp(true); }, 20000);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -4281,14 +4147,6 @@ function exportData(){
   URL.revokeObjectURL(a.href);
   // Update save indicator
   document.getElementById('last-save').textContent=\`Fichier sauvegardé le \${new Date().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}\`;
-}
-
-function saveToFirebaseFromApp(silent){
-  if(window.parent && typeof window.parent.saveToFirebase === 'function'){
-    window.parent.saveToFirebase(!!silent).catch(function(){});
-  } else if(!silent){
-    showToast('<i class="fa-solid fa-triangle-exclamation"></i>&nbsp; Firebase non disponible. Connectez-vous dans les paramètres du hub.','warning');
-  }
 }
 
 function loadFromFile(event){
@@ -7125,7 +6983,6 @@ body.print-landscape-ventilation { }
       <button class="btn btn-sm" style="background:rgba(41,128,185,.85);color:#fff;border:none;" onclick="generatePPTX()" title="Présentation PPTX"><i class="fa-solid fa-file-powerpoint"></i> Présentation</button>
       <label class="btn btn-sm" style="background:rgba(201,144,42,.85);color:#fff;border:none;cursor:pointer;" title="Charger une sauvegarde JSON"><i class="fa-solid fa-folder-open"></i> Charger <input type="file" accept=".json" style="display:none" onchange="loadFromFile(event)"></label>
       <button class="btn btn-sm" style="background:#1a7a46;color:#fff;border:none;font-weight:700;" onclick="exportData()" title="Sauvegarder toutes les données (fichier JSON — clé USB, autre ordinateur)"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder tout</button>
-      <button class="btn btn-sm" style="background:#1a73e8;color:#fff;border:none;font-weight:700;" onclick="saveToFirebaseFromApp()" title="Envoyer la sauvegarde complète (LGT + SEP) vers Firebase"><i class="fa-solid fa-cloud-arrow-up"></i> Cloud</button>
       <button class="btn btn-sm" style="background:rgba(192,57,43,.85);color:#fff;border:none;" onclick="resetAllData()" title="Réinitialiser toutes les données"><i class="fa-solid fa-rotate-left"></i> Réinitialiser</button>
       <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="printPage()"><i class="fa-solid fa-print"></i></button>
     </div>
@@ -8104,15 +7961,8 @@ function initVentilation(){
 
 function saveState(){
   localStorage.setItem('dgh_sep_state',JSON.stringify(state));
-  scheduleFirebaseAutoSync();
   const now=new Date();
   document.getElementById('last-save').textContent=\`Sauvegardé \${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}\`;
-}
-
-var _fbAutoSyncTimer=null;
-function scheduleFirebaseAutoSync(){
-  clearTimeout(_fbAutoSyncTimer);
-  _fbAutoSyncTimer=setTimeout(function(){ saveToFirebaseFromApp(true); }, 20000);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -9437,14 +9287,6 @@ function exportData(){
   URL.revokeObjectURL(a.href);
   // Update save indicator
   document.getElementById('last-save').textContent=\`Fichier sauvegardé le \${new Date().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}\`;
-}
-
-function saveToFirebaseFromApp(silent){
-  if(window.parent && typeof window.parent.saveToFirebase === 'function'){
-    window.parent.saveToFirebase(!!silent).catch(function(){});
-  } else if(!silent){
-    showToast('<i class="fa-solid fa-triangle-exclamation"></i>&nbsp; Firebase non disponible. Connectez-vous dans les paramètres du hub.','warning');
-  }
 }
 
 function loadFromFile(event){
@@ -11837,30 +11679,6 @@ if(typeof INJECTED_STATE !== 'undefined' && INJECTED_STATE !== null){
         <input type="file" accept=".json" style="display:none" onchange="loadAllData(event)">
       </label>
     </div>
-    <div class="hub-psect"><i class="fa-brands fa-google"></i> Sauvegarde Cloud (Firebase)</div>
-    <div id="fb-auth-status" style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:12px;padding:4px 0;"></div>
-    <button id="fb-signin-btn" class="hub-pbtn-action" onclick="signInWithGoogle()" style="width:100%;margin-bottom:10px;">
-      <i class="fa-brands fa-google" style="color:#4285F4;font-size:16px;"></i>
-      <div><div class="hba-lbl">Se connecter avec Google</div><div class="hba-sub">Requis pour la sauvegarde cloud</div></div>
-    </button>
-    <button id="fb-signout-btn" class="hub-pbtn-action" onclick="signOutFirebase()" style="display:none;width:100%;margin-bottom:10px;">
-      <i class="fa-solid fa-right-from-bracket" style="color:rgba(255,255,255,.5);"></i>
-      <div><div class="hba-lbl">Se déconnecter</div><div class="hba-sub">Désactiver la synchronisation cloud</div></div>
-    </button>
-    <div id="fb-sync-btns" style="display:none;gap:10px;margin-bottom:4px;">
-      <button class="hub-pbtn-action" onclick="saveToFirebase(false)">
-        <i class="fa-solid fa-cloud-arrow-up" style="color:#4ade80;"></i>
-        <div><div class="hba-lbl">Sauvegarder</div><div class="hba-sub">Envoyer LGT + SEP vers Firebase</div></div>
-      </button>
-      <button class="hub-pbtn-action" onclick="loadFromFirebase()">
-        <i class="fa-solid fa-cloud-arrow-down" style="color:#60a5fa;"></i>
-        <div><div class="hba-lbl">Charger</div><div class="hba-sub">Récupérer la dernière sauvegarde</div></div>
-      </button>
-    </div>
-    <p class="hub-pnote">
-      <i class="fa-solid fa-circle-info" style="margin-right:4px;"></i>
-      La synchronisation est automatique après chaque saisie (délai 20s). Vos données sont stockées dans votre espace Firebase privé.
-    </p>
     <div class="hub-pactions">
       <button class="hub-pbtn-cancel" onclick="closeHubParams()">Fermer</button>
       <button class="hub-pbtn-save" onclick="saveHubParams()">
