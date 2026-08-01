@@ -513,6 +513,8 @@ function showHubToast(msg) {
   window._hubToastT = setTimeout(function(){ t.classList.remove('visible'); }, 3200);
 }
 
+var _APP_SRC = {lgt:'LGT_SRC', sep:'SEP_SRC', clg:'CLG_SRC'};
+
 function activateApp(appId, label) {
   var loader = document.getElementById('hub-loader');
   loader.classList.remove('hidden');
@@ -522,7 +524,13 @@ function activateApp(appId, label) {
   var frame = document.getElementById(appId+'-frame');
   if(!frame) { returnToHub(); return; }
   _activeApp = appId;
-  var timeout = setTimeout(function(){ frame.classList.add('active'); loader.classList.add('hidden'); }, 500);
+  // Chargement paresseux : on injecte le srcdoc uniquement \u00e0 la premi\u00e8re ouverture
+  if(!frame._loaded && !frame.srcdoc) {
+    var srcName = _APP_SRC[appId];
+    var src = srcName && window[srcName];
+    if(src) frame.srcdoc = src;
+  }
+  var timeout = setTimeout(function(){ frame.classList.add('active'); loader.classList.add('hidden'); }, 800);
   if(frame._loaded) {
     clearTimeout(timeout); frame.classList.add('active'); loader.classList.add('hidden');
   } else {
@@ -811,14 +819,6 @@ window.hubGeneratePDF = function(discFilter) {
 window.addEventListener('DOMContentLoaded', function() {
   applyHubParams();
   var loader = document.getElementById('hub-loader');
-  var loaderText = loader ? loader.querySelector('.loader-text') : null;
-  applyHubParams();
-  var lf = document.getElementById('lgt-frame');
-  var sf = document.getElementById('sep-frame');
-  var cf = document.getElementById('clg-frame');
-  if(typeof LGT_SRC!=='undefined'&&lf) lf.srcdoc = LGT_SRC;
-  if(typeof SEP_SRC!=='undefined'&&sf) sf.srcdoc = SEP_SRC;
-  if(typeof CLG_SRC!=='undefined'&&cf) cf.srcdoc = CLG_SRC;
   setTimeout(function(){ if(loader) loader.classList.add('hidden'); }, 300);
 });
 </script>
